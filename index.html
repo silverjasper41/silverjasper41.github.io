@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秘密基地发布页-独立发布站导航与更新档案</title>
+<meta name="description" content="秘密基地发布页收录独立发布站的稳定入口、更新记录与访问方法，整理域名变更、镜像选择、订阅提醒与常见故障排查，按日期归档每次版本与通道调整，方便长期访问的人快速核对当前有效信息。">
+<meta name="keywords" content="秘密基地发布页">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2b3a'/%3E%3Cpath d='M18 42V24l14 10 14-10v18' fill='none' stroke='%23f0b429' stroke-width='5' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='46' r='3' fill='%23f0b429'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f5f2ec;
+  --surface:#fffdf8;
+  --ink:#1b2b3a;
+  --ink-soft:#465a6b;
+  --line:#dcd5c7;
+  --brand:#1b2b3a;
+  --brand-2:#2f4a5e;
+  --accent:#b8860b;
+  --accent-soft:#f6e7c3;
+  --warn:#8a3b2e;
+  --ok:#2c6e49;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 1px 2px rgba(27,43,58,.06),0 6px 18px rgba(27,43,58,.07);
+  --space:16px;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --fs-h1:clamp(1.7rem,2.4vw + 1rem,2.6rem);
+  --fs-h2:1.32rem;
+  --fs-h3:1.06rem;
+  --fs-body:1rem;
+  --fs-small:.86rem;
+  --stick-top:96px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:var(--font);
+  font-size:var(--fs-body);
+  line-height:1.75;
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,p,ul,ol,dl,figure{margin:0}
+ul,ol{padding-left:1.2em}
+a{color:var(--brand-2);text-decoration:none;border-bottom:1px solid rgba(47,74,94,.28)}
+a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+img{max-width:100%;display:block}
+button{font-family:inherit}
+
+/* ===== 吸顶公告条 ===== */
+.announce{
+  position:sticky;top:0;z-index:60;
+  background:var(--brand);
+  color:#f3ede1;
+  font-size:var(--fs-small);
+  letter-spacing:.01em;
+}
+.announce-inner{
+  max-width:1180px;margin:0 auto;
+  padding:7px var(--space);
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+}
+.announce strong{color:#f0c96a;font-weight:600}
+.announce .tag{
+  display:inline-block;padding:1px 7px;border:1px solid #f0c96a;
+  border-radius:99px;color:#f0c96a;font-size:.75rem;
+}
+
+/* ===== 页头 ===== */
+.site-header{
+  position:sticky;top:33px;z-index:55;
+  background:rgba(255,253,248,.94);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{
+  max-width:1180px;margin:0 auto;padding:10px var(--space);
+  display:flex;align-items:center;gap:18px;
+}
+.brand{display:flex;align-items:center;gap:10px;border:none}
+.brand-mark{
+  width:38px;height:38px;flex:0 0 38px;
+  border-radius:11px;background:var(--brand);
+  display:grid;place-items:center;
+}
+.brand-name{font-weight:700;font-size:1.02rem;color:var(--ink);letter-spacing:.02em}
+.brand-sub{display:block;font-size:.66rem;color:var(--ink-soft);letter-spacing:.16em;font-weight:400}
+.main-nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+.main-nav a{
+  border:none;padding:7px 11px;border-radius:var(--radius-sm);
+  color:var(--ink-soft);font-size:.9rem;transition:background .18s,color .18s;
+}
+.main-nav a:hover,.main-nav a:focus-visible{background:var(--accent-soft);color:var(--brand)}
+.menu-btn{
+  display:none;margin-left:auto;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:7px 11px;font-size:.9rem;color:var(--ink);cursor:pointer;
+}
+.menu-btn:focus-visible,.main-nav a:focus-visible,.search-input:focus-visible,.btn:focus-visible,
+summary:focus-visible,.to-top:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.search-wrap{display:flex;align-items:center;gap:6px}
+.search-input{
+  width:172px;padding:7px 10px;border:1px solid var(--line);border-radius:99px;
+  background:var(--surface);font-size:.86rem;color:var(--ink);
+}
+.search-input::placeholder{color:#93a0ab}
+.search-result{font-size:.78rem;color:var(--ink-soft);min-height:1em;display:none}
+
+/* ===== 布局 ===== */
+main{max-width:1180px;margin:0 auto;padding:0 var(--space) 40px}
+section{scroll-margin-top:var(--stick-top)}
+.layout{
+  display:grid;grid-template-columns:minmax(0,1fr) 296px;
+  gap:34px;align-items:start;padding-top:26px;
+}
+.col-main{min-width:0}
+.col-side{min-width:0;position:sticky;top:calc(var(--stick-top) + 8px)}
+@media (max-width:1000px){
+  .layout{grid-template-columns:1fr}
+  .col-side{position:static;order:2}
+  .col-main{order:1}
+}
+
+/* ===== 首屏 ===== */
+.hero{
+  position:relative;overflow:hidden;
+  max-width:1180px;margin:0 auto;
+  padding:38px var(--space) 30px;
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:26px;align-items:center;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.78rem;letter-spacing:.14em;color:var(--accent);
+  border:1px solid var(--accent);border-radius:99px;padding:3px 10px;margin-bottom:14px;
+}
+.hero h1{
+  font-size:var(--fs-h1);line-height:1.28;letter-spacing:-.01em;margin-bottom:14px;
+}
+.hero h1 .accent{color:var(--accent)}
+.hero-lede{color:var(--ink-soft);max-width:38em;font-size:.98rem}
+.hero-lede b{color:var(--ink);font-weight:600}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.btn{
+  display:inline-block;border:none;border-radius:99px;
+  padding:10px 20px;font-size:.92rem;font-weight:600;cursor:pointer;
+  transition:transform .18s,background .18s,box-shadow .18s;
+}
+.btn-primary{background:var(--brand);color:#fdf7e6}
+.btn-primary:hover{background:var(--brand-2);transform:translateY(-2px);color:#fff}
+.btn-ghost{background:var(--surface);color:var(--brand);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
+.hero-stats div{font-size:.8rem;color:var(--ink-soft)}
+.hero-stats b{display:block;font-size:1.34rem;color:var(--ink);letter-spacing:.01em}
+.hero-art{
+  position:relative;aspect-ratio:5/4;border-radius:18px;
+  background:
+    radial-gradient(120% 90% at 82% 8%, #f6e7c3 0%, rgba(246,231,195,0) 58%),
+    linear-gradient(150deg,#1b2b3a 0%,#2f4a5e 100%);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-art .caption{
+  position:absolute;left:14px;bottom:12px;font-size:.7rem;color:#cdd8e0;letter-spacing:.08em;
+}
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;padding-top:26px}
+  .hero-art{aspect-ratio:16/9;order:-1}
+}
+
+/* ===== 通用板块 ===== */
+.block{margin-top:40px}
+.block-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.block-head h2{font-size:var(--fs-h2);letter-spacing:-.01em}
+.block-head .note{font-size:.78rem;color:var(--ink-soft)}
+.section-kicker{
+  font-size:.74rem;letter-spacing:.16em;color:var(--accent);
+  text-transform:uppercase;display:block;margin-bottom:2px;
+}
+
+/* 卡片网格 */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 16px 14px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:8px;
+  transition:transform .18s,border-color .18s;
+}
+.card:hover{transform:translateY(-3px);border-color:#c9bfa9}
+.card h3{font-size:var(--fs-h3);line-height:1.45}
+.card p{font-size:.88rem;color:var(--ink-soft)}
+.card-meta{font-size:.74rem;color:#7d8b96;letter-spacing:.02em;margin-top:auto}
+.badge{
+  display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:99px;
+  background:var(--accent-soft);color:#7a5c08;letter-spacing:.02em;
+}
+.badge-ok{background:#dcece1;color:var(--ok)}
+.badge-warn{background:#f2dcd7;color:var(--warn)}
+
+/* 紧凑列表 */
+.tight-list{list-style:none;padding:0;display:flex;flex-direction:column}
+.tight-list li{
+  display:flex;gap:14px;align-items:baseline;
+  padding:11px 2px;border-bottom:1px dashed var(--line);
+}
+.tight-list li:last-child{border-bottom:none}
+.tight-list time{flex:0 0 84px;font-size:.78rem;color:#7d8b96;font-variant-numeric:tabular-nums}
+.tight-list .item{min-width:0}
+.tight-list .item b{font-weight:600}
+.tight-list .item span{display:block;font-size:.84rem;color:var(--ink-soft)}
+
+/* 分栏正文（深度解析） */
+.deep{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 26px;box-shadow:var(--shadow);
+}
+.deep>p{font-size:.97rem;color:#2a3b49}
+.deep h3{
+  font-size:var(--fs-h3);margin:26px 0 8px;padding-left:12px;
+  border-left:3px solid var(--accent);
+}
+.deep h3:first-of-type{margin-top:6px}
+.deep ul{margin:8px 0 12px;padding-left:1.25em;font-size:.93rem;color:#2a3b49}
+.deep li{margin:4px 0}
+.pullquote{
+  margin:18px 0;padding:14px 18px;border-radius:var(--radius-sm);
+  background:linear-gradient(100deg,#f6e7c3,rgba(246,231,195,.25));
+  border-left:3px solid var(--accent);font-size:.94rem;color:#4a3c10;
+}
+.compare{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0 16px}
+.compare caption{text-align:left;font-size:.76rem;color:var(--ink-soft);padding-bottom:6px}
+.compare th,.compare td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.compare th{background:#f0ece1;font-weight:600;font-size:.82rem}
+.compare td b{color:var(--brand)}
+
+/* 编号步骤 */
+.steps{list-style:none;padding:0;counter-reset:step;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.steps li{
+  counter-increment:step;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:16px 16px 14px;position:relative;
+}
+.steps li::before{
+  content:counter(step,decimal-leading-zero);
+  font-size:.78rem;font-weight:700;color:var(--accent);
+  border:1px solid var(--accent);border-radius:99px;padding:1px 8px;
+  display:inline-block;margin-bottom:8px;letter-spacing:.08em;
+}
+.steps h3{font-size:.98rem;margin-bottom:4px}
+.steps p{font-size:.86rem;color:var(--ink-soft)}
+
+/* 标签索引 */
+.tag-index{display:flex;flex-wrap:wrap;gap:8px}
+.tag-index a{
+  border:1px solid var(--line);border-radius:99px;padding:5px 13px;
+  font-size:.86rem;color:var(--ink-soft);background:var(--surface);
+  transition:border-color .18s,color .18s,background .18s;
+}
+.tag-index a:hover{border-color:var(--accent);color:#7a5c08;background:var(--accent-soft)}
+
+/* FAQ */
+.faq details{
+  border:1px solid var(--line);border-radius:var(--radius-sm);
+  background:var(--surface);margin-bottom:8px;padding:0 14px;
+}
+.faq summary{
+  cursor:pointer;padding:12px 0;font-weight:600;font-size:.94rem;list-style-position:outside;
+}
+.faq summary::marker{color:var(--accent)}
+.faq details[open] summary{border-bottom:1px dashed var(--line);margin-bottom:10px}
+.faq .ans{font-size:.9rem;color:var(--ink-soft);padding-bottom:12px}
+.faq .ans b{color:var(--ink)}
+
+/* 评论 */
+.comments{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.comment{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px;font-size:.89rem;display:flex;flex-direction:column;gap:8px;
+}
+.comment p{color:#2f414f}
+.comment .who{font-size:.76rem;color:#7d8b96;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.comment .who b{color:var(--ink);font-weight:600}
+
+/* 时间线 */
+.timeline{list-style:none;padding:0;border-left:2px solid var(--line);margin-left:6px}
+.timeline li{position:relative;padding:0 0 18px 22px}
+.timeline li::before{
+  content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;
+  border-radius:50%;background:var(--surface);border:2px solid var(--accent);
+}
+.timeline time{font-size:.76rem;color:#7d8b96;letter-spacing:.04em;display:block}
+.timeline b{font-weight:600}
+.timeline p{font-size:.87rem;color:var(--ink-soft)}
+
+/* 引用/证言卡 */
+.quote-card{
+  background:linear-gradient(160deg,#1b2b3a,#2f4a5e);color:#e8eef3;
+  border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:12px;
+}
+.quote-card p{font-size:1rem;line-height:1.8}
+.quote-card .src{font-size:.78rem;color:#a9bccb;letter-spacing:.04em}
+.quote-card .src b{color:#f0c96a;font-weight:600}
+
+/* 侧栏 */
+.side-panel{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--shadow);margin-bottom:18px;
+}
+.side-panel h2{font-size:.98rem;margin-bottom:10px;letter-spacing:.01em}
+.side-nav{list-style:none;padding:0;font-size:.88rem}
+.side-nav a{
+  display:block;padding:6px 9px;border:none;border-radius:var(--radius-sm);
+  color:var(--ink-soft);transition:background .18s,color .18s;
+}
+.side-nav a:hover{background:#f3eee2;color:var(--brand)}
+.side-nav a.active{background:var(--accent-soft);color:#6d5107;font-weight:600}
+.side-mini{font-size:.82rem;color:var(--ink-soft)}
+.side-mini li{margin:5px 0}
+.side-list{list-style:none;padding:0;font-size:.85rem}
+.side-list li{padding:7px 0;border-bottom:1px dashed var(--line)}
+.side-list li:last-child{border:none}
+.side-list time{display:block;font-size:.74rem;color:#8a97a2}
+
+/* 页脚 */
+.site-footer{
+  background:var(--brand);color:#c9d5de;margin-top:46px;
+  padding:34px var(--space) 26px;font-size:.88rem;
+}
+.footer-inner{max-width:1180px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.2fr repeat(3,minmax(0,.8fr));gap:26px}
+.footer-brand .brand-name{color:#fdf7e6}
+.footer-brand .brand-sub{color:#8fa3b2}
+.footer-brand p{color:#a9bccb;font-size:.85rem;margin-top:10px;max-width:24em}
+.footer-col h3{font-size:.82rem;letter-spacing:.12em;color:#8fa3b2;margin-bottom:9px;font-weight:600}
+.footer-col ul{list-style:none;padding:0}
+.footer-col li{margin:5px 0}
+.footer-col a{color:#d6e0e7;border:none;font-size:.86rem}
+.footer-col a:hover{color:#f0c96a}
+.footer-note{
+  border-top:1px solid rgba(255,255,255,.14);margin-top:26px;padding-top:16px;
+  font-size:.78rem;color:#8fa3b2;display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
+}
+@media (max-width:820px){
+  .footer-top{grid-template-columns:1fr 1fr}
+  .footer-brand{grid-column:1/-1}
+}
+
+/* 浮动回顶 */
+.to-top{
+  position:fixed;right:16px;bottom:18px;z-index:70;
+  background:var(--brand);color:#fdf7e6;border:none;border-radius:99px;
+  padding:9px 14px;font-size:.82rem;cursor:pointer;box-shadow:var(--shadow);
+  opacity:0;visibility:hidden;transform:translateY(6px);
+  transition:opacity .2s,transform .2s,visibility .2s;
+}
+.to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+
+/* 搜索命中高亮 */
+.hit{background:#fbe9a7;border-radius:3px;padding:0 2px}
+.search-none{color:var(--warn);font-size:.8rem}
+
+@media (max-width:820px){
+  .main-nav{
+    display:none;position:absolute;left:0;right:0;top:100%;
+    background:var(--surface);border-bottom:1px solid var(--line);
+    padding:8px var(--space) 12px;flex-direction:column;gap:2px;box-shadow:var(--shadow);
+  }
+  .main-nav.open{display:flex}
+  .menu-btn{display:block}
+  .header-inner{position:relative;flex-wrap:wrap}
+  .search-wrap{order:3;width:100%;margin-top:8px}
+  .search-input{width:100%}
+  :root{--stick-top:132px}
+}
+@media (max-width:480px){
+  :root{--stick-top:150px;--space:14px}
+  .header-inner{gap:10px}
+  .hero-stats{gap:16px}
+  .deep{padding:18px 16px}
+  .to-top{right:12px;bottom:12px;padding:8px 12px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+  .card:hover,.btn:hover{transform:none}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"秘密基地发布页",
+  "alternateName":"秘密基地发布页导航档案",
+  "description":"收录独立发布站的稳定入口、更新记录与访问方法，按日期归档每次版本与通道调整。",
+  "inLanguage":"zh-CN",
+  "dateModified":"2026-11-08"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"秘密基地发布页当前的主入口是哪条通道？","acceptedAnswer":{"@type":"Answer","text":"2026年11月6日启用的主入口为 hub 通道，编号 H-2026-1106，页面顶部公告条同步显示该编号；镜像 M-02、M-03 保留只读查询，更新频率低于主入口。"}},
+    {"@type":"Question","name":"镜像站与主入口的更新间隔差多少？","acceptedAnswer":{"@type":"Answer","text":"主入口每 6 小时同步一次，镜像 M-02 为 24 小时，M-03 为 72 小时。10月28日至11月4日的对照记录显示，镜像平均滞后主入口 19 条目录项，最多滞后 41 条。"}},
+    {"@type":"Question","name":"发布页打不开时先检查什么？","acceptedAnswer":{"@type":"Answer","text":"先比对公告条的通道编号与本机缓存页面编号是否一致，再换用 M-02 通道验证网络是否可达。2026年10月31日一次解析异常中，编号不一致是唯一复现条件。"}},
+    {"@type":"Question","name":"订阅更新提醒有哪几种方式？","acceptedAnswer":{"@type":"Answer","text":"现有邮件摘要、RSS 与站内更新日志三种。邮件摘要每周三发送，RSS 保留最近 30 条，站内日志按分钟级排序；三者字段口径一致，均含通道编号与生效时间。"}},
+    {"@type":"Question","name":"旧版入口还能继续使用多久？","acceptedAnswer":{"@type":"Answer","text":"旧通道 V-01 于2026年10月15日进入过渡期，公告写明保留至2026年12月31日；期间仅提供跳转，不再承载新目录项。"}}
+  ]
+}
+</script>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<div class="announce" id="announceBar">
+  <div class="announce-inner">
+    <span class="tag">更新</span>
+    <strong>秘密基地发布页</strong>
+    <span>11月6日启用主入口 H-2026-1106，镜像 M-02 同步周期改为 24 小时</span>
+    <span>｜10月31日解析异常已复现并归档</span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/#hero" aria-label="秘密基地发布页 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+          <path d="M6 23V10l10 7 10-7v13" stroke="#f0b429" stroke-width="2.6" stroke-linejoin="round"/>
+          <circle cx="16" cy="25" r="1.8" fill="#f0b429"/>
+        </svg>
+      </span>
+      <span class="brand-name">秘密基地发布页<span class="brand-sub">RELEASE HUB</span></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainNav">栏目</button>
+    <nav class="main-nav" id="mainNav" aria-label="主题导航">
+      <a href="/#overview">领域概览</a>
+      <a href="/#picks">精选目录</a>
+      <a href="/#latest">更新日志</a>
+      <a href="/#channels">通道分类</a>
+      <a href="/#deep">深度解析</a>
+      <a href="/#guide">访问指南</a>
+      <a href="/#faq">常见问题</a>
+    </nav>
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" type="search" placeholder="搜索通道、条目、日期" aria-label="站内搜索">
+      <span class="search-result" id="searchResult" role="status" aria-live="polite"></span>
+    </div>
+  </div>
+</header>
+
+<div class="hero" id="hero">
+  <div>
+    <span class="hero-eyebrow">独立发布 · 按日归档</span>
+    <h1>秘密基地发布页</h1>
+    <p class="hero-lede">一条主入口、两条镜像、一份可以逐条核对的更新记录。公告条的通道编号与日志里的生效时间对得上，才说明你打开的是当前版本。<b>截至 2026 年 11 月 8 日</b>，主入口在 H-2026-1106，镜像 M-02 滞后不超过 24 小时。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/#channels">查看当前通道</a>
+      <a class="btn btn-ghost" href="/#guide">访问与排查步骤</a>
+    </div>
+    <div class="hero-stats" aria-label="发布页概况">
+      <div><b>3</b>条在线通道</div>
+      <div><b>187</b>条目录项</div>
+      <div><b>6h</b>主入口同步周期</div>
+      <div><b>11-08</b>本期归档日期</div>
+    </div>
+  </div>
+  <div class="hero-art" role="img" aria-label="由同心环与节点连线构成的发布通道示意图">
+    <svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="g1" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="#f0c96a" stop-opacity=".34"/>
+          <stop offset="100%" stop-color="#f0c96a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="220" cy="140" r="120" fill="url(#g1)"/>
+      <g stroke="#7f97a8" stroke-width="1" fill="none" opacity=".55">
+        <circle cx="220" cy="140" r="96"/>
+        <circle cx="220" cy="140" r="66"/>
+        <circle cx="220" cy="140" r="36"/>
+      </g>
+      <g fill="#f0c96a">
+        <circle cx="220" cy="44" r="4"/>
+        <circle cx="316" cy="140" r="4"/>
+        <circle cx="220" cy="236" r="4"/>
+        <circle cx="124" cy="140" r="4"/>
+      </g>
+      <g stroke="#f0c96a" stroke-width="1.4" opacity=".8">
+        <line x1="220" y1="44" x2="220" y2="104"/>
+        <line x1="316" y1="140" x2="256" y2="140"/>
+        <line x1="220" y1="236" x2="220" y2="176"/>
+        <line x1="124" y1="140" x2="184" y2="140"/>
+      </g>
+      <g fill="none" stroke="#cdd8e0" stroke-width="1.2" opacity=".5">
+        <path d="M56 262 L120 200 L164 228 L244 176 L330 214"/>
+      </g>
+      <g fill="#cdd8e0">
+        <circle cx="56" cy="262" r="3"/>
+        <circle cx="120" cy="200" r="3"/>
+        <circle cx="164" cy="228" r="3"/>
+        <circle cx="244" cy="176" r="3"/>
+        <circle cx="330" cy="214" r="3"/>
+      </g>
+      <text x="220" y="145" text-anchor="middle" font-size="13" fill="#fdf7e6" font-family="sans-serif" letter-spacing="2">H-1106</text>
+    </svg>
+    <span class="caption">主入口 · 同心校验环</span>
+  </div>
+</div>
+
+<main>
+<div class="layout">
+<div class="col-main">
+
+  <!-- 1 领域概览 -->
+  <section class="block" id="overview">
+    <div class="block-head">
+      <span class="section-kicker">OVERVIEW</span>
+      <h2>领域概览：发布页到底在维护什么</h2>
+    </div>
+    <p>一个独立发布站通常由三样东西组成：入口地址、目录条目、版本记录。入口决定你能否打开，目录决定你能找到哪些条目，版本记录决定你看到的是不是最新的那一份。三者中任何一项对不上，页面看起来能开，内容却已经是旧的。</p>
+    <p>以 2026 年 11 月 6 日的切换为例，主入口从 G-2026-1012 迁到 H-2026-1106，目录项在迁移窗口内新增了 14 条、下线了 3 条。镜像 M-02 直到 11 月 7 日 09:20 才补齐，滞后 19 条。这个差值不是故障，而是同步周期的正常代价——主入口每 6 小时跑一次，镜像按 24 小时跑。</p>
+    <div class="tag-index" style="margin-top:14px">
+      <a href="/#latest">通道编号</a>
+      <a href="/#channels">镜像选择</a>
+      <a href="/#guide">缓存比对</a>
+      <a href="/#deep">同步周期</a>
+      <a href="/#faq">过渡期公告</a>
+      <a href="/#comments">旧入口体验</a>
+      <a href="/#recommend">订阅提醒</a>
+    </div>
+  </section>
+
+  <!-- 2 精选推荐 -->
+  <section class="block" id="picks">
+    <div class="block-head">
+      <span class="section-kicker">PICKS</span>
+      <h2>精选内容推荐：本周值得打开的五个条目</h2>
+      <span class="note">按 11 月 1 日至 11 月 8 日的目录权重排序</span>
+    </div>
+    <div class="card-grid">
+      <article class="card">
+        <span class="badge">主入口</span>
+        <h3>H-2026-1106 通道说明页</h3>
+        <p>列出该通道的生效时间、同步周期与回退路径。迁移窗口内出现的 3 条下线记录在这里完整保留。</p>
+        <span class="card-meta">11-06 生效 · 条目 42 条</span>
+      </article>
+      <article class="card">
+        <span class="badge badge-ok">归档</span>
+        <h3>10月31日解析异常复盘</h3>
+        <p>记录一次 DNS 解析漂移：编号与本机缓存不一致是唯一复现条件，处置耗时 2 小时 40 分。</p>
+        <span class="card-meta">10-31 归档 · 复现 4 次</span>
+      </article>
+      <article class="card">
+        <span class="badge">索引</span>
+        <h3>镜像 M-02 与 M-03 差异对照</h3>
+        <p>两条镜像在更新频率、保留字段、只读范围上的差异用表格列清，避免把只读当可写。</p>
+        <span class="card-meta">11-04 更新 · 2 条通道</span>
+      </article>
+      <article class="card">
+        <span class="badge badge-warn">过渡</span>
+        <h3>旧通道 V-01 倒计时提示</h3>
+        <p>10月15日进入过渡期，保留至 12 月 31 日。期间只跳转，不承载新目录项。</p>
+        <span class="card-meta">12-31 到期 · 剩余 53 天</span>
+      </article>
+      <article class="card">
+        <span class="badge">订阅</span>
+        <h3>邮件摘要与 RSS 字段口径</h3>
+        <p>两者都含通道编号与生效时间，差异在发送频率：摘要每周三，RSS 保留最近 30 条。</p>
+        <span class="card-meta">11-02 核对 · 3 种方式</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- 3 最新更新 -->
+  <section class="block" id="latest">
+    <div class="block-head">
+      <span class="section-kicker">LOG</span>
+      <h2>最新更新：按分钟排的变更日志</h2>
+      <span class="note">11月1日—11月8日</span>
+    </div>
+    <ul class="tight-list">
+      <li><time>11-08 10:12</time><span class="item"><b>目录项 187 条</b><span>较 11 月 1 日净增 11 条，其中 3 条为下线记录，全部标注处理人编号。</span></span></li>
+      <li><time>11-07 09:20</time><span class="item"><b>镜像 M-02 补齐 19 条</b><span>昨日 15:00 至今日 09:20 的增量集中在两个分类下。</span></span></li>
+      <li><time>11-06 08:40</time><span class="item"><b>主入口切换至 H-2026-1106</b><span>回退参数保留 72 小时，控制台可查上一版本号 G-2026-1012。</span></span></li>
+      <li><time>11-04 16:05</time><span class="item"><b>M-03 只读范围调整</b><span>新增 2 个只读字段，写入接口保持关闭。</span></span></li>
+      <li><time>11-02 11:30</time><span class="item"><b>邮件摘要字段补齐</b><span>新增生效时间列，与 RSS 对齐。</span></span></li>
+      <li><time>10-31 21:48</time><span class="item"><b>解析异常处置结束</b><span>耗时 2 小时 40 分，编号比对机制写进排查顺序第一条。</span></span></li>
+    </ul>
+  </section>
+
+  <!-- 4 分类入口 -->
+  <section class="block" id="channels">
+    <div class="block-head">
+      <span class="section-kicker">CHANNELS</span>
+      <h2>分类入口：按用途分三条线</h2>
+    </div>
+    <div class="card-grid">
+      <article class="card">
+        <h3>日常访问通道</h3>
+        <p>主入口 H-2026-1106 与镜像 M-02。适合每周固定查看的人，缓存差异多数在 24 小时内自动消解。</p>
+        <span class="card-meta">同步 6h / 24h</span>
+      </article>
+      <article class="card">
+        <h3>只读校验通道</h3>
+        <p>M-03 与历史归档页，保留字段完整但不接受写入。用于比对某条目是否被改过。</p>
+        <span class="card-meta">保留最近 12 期</span>
+      </article>
+      <article class="card">
+        <h3>订阅与提醒通道</h3>
+        <p>邮件摘要、RSS、站内日志三条，字段口径一致。适合不常开页面、但需要知道编号变更的人。</p>
+        <span class="card-meta">3 种方式</span>
+      </article>
+      <article class="card">
+        <h3>迁移与过渡通道</h3>
+        <p>旧通道 V-01 只做跳转，保留至 12 月 31 日。跳转页会显示目标编号，便于二次确认。</p>
+        <span class="card-meta">12-31 到期</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- 5 深度解析 -->
+  <section class="block" id="deep">
+    <div class="block-head">
+      <span class="section-kicker">ANALYSIS</span>
+      <h2>深度解析：镜像滞后不是问题，编号不比对才是</h2>
+    </div>
+    <div class="deep">
+      <p>独立发布页最常见的误判，是把“能打开”当成“是新的”。2026 年 10 月 28 日至 11 月 4 日这一周的对照记录给出了反例：镜像 M-02 全程可访问，但目录项平均滞后主入口 19 条，最多的一次差了 41 条。差距来自同步周期，而不是故障。</p>
+
+      <h3>1. 把滞后量算出来，而不是感觉出来</h3>
+      <p>下表取 10 月 28 日到 11 月 4 日的 8 个采样点，比较主入口与 M-02 的目录项总数。主入口在 11 月 1 日有一次批量新增，M-02 到 11 月 2 日才收敛，这段差异是判断同步健康度的关键区间。</p>
+      <table class="compare">
+        <caption>采样口径：每日 09:00 抓取目录项总数，单位为条</caption>
+        <thead>
+          <tr><th>采样日</th><th>主入口 H</th><th>镜像 M-02</th><th>差值</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>10-28</td><td>171</td><td>158</td><td>13</td></tr>
+          <tr><td>10-30</td><td>173</td><td>158</td><td>15</td></tr>
+          <tr><td>11-01</td><td>184</td><td>160</td><td><b>24</b></td></tr>
+          <tr><td>11-02</td><td>184</td><td>176</td><td>8</td></tr>
+          <tr><td>11-04</td><td>185</td><td>180</td><td>5</td></tr>
+          <tr><td>11-06</td><td>187</td><td>168</td><td><b>19</b></td></tr>
+        </tbody>
+      </table>
+      <p>差值在切换到新编号当天再次拉大，是因为 M-02 仍按旧周期跑批。可以反驳的地方在于：如果只看 11 月 2 日那一行，会得出“镜像很健康”的结论；但把 11 月 1 日与 11 月 6 日两个切换点并排看，结论就反过来了。<b>滞后是可预期的，不可预期的是滞后发生在条目结构变化的时候。</b></p>
+
+      <h3>2. 一组可以直接照做的核对顺序</h3>
+      <p>10 月 31 日那次解析异常，处置记录里排第一的不是换网络，是对编号。页面顶部公告条给出通道编号，本机缓存页脚给出缓存编号，两者一致才继续看内容。这个顺序后来被写进排查清单，四次复现全部命中。</p>
+      <ul>
+        <li>比编号：公告条编号与本机页面编号是否同一串。</li>
+        <li>比时间：日志最近一条的时间是否在 6 小时内。</li>
+        <li>比条目数：当前总数是否与日志里的数字相同。</li>
+        <li>最后才换通道：M-02 用于验证网络可达，不用于判断内容新旧。</li>
+      </ul>
+      <div class="pullquote">可以引用的一条判断：在同步周期明确写出的发布体系里，入口是否最新由编号与条目数两个可核对的量决定，访问速度不构成证据。11 月 6 日切换当天，主入口响应比 M-02 慢 0.4 秒，但它是唯一完整的通道。</div>
+
+      <h3>3. 过渡期的说法差异要分开记</h3>
+      <p>关于旧通道 V-01 的去留，出现了三种说法。公告写的是“保留至 12 月 31 日，仅跳转”；目录维护记录写的是“不再承载新条目，历史条目保留只读”；用户反馈里有人转述成“月底彻底关闭”。前两条属于事实层面的两个不同维度，第三条是转述，目前没有对应的公告原文，按推测处理。</p>
+      <p>把这三层分开之后，就能解释 11 月 3 日的一条评论为什么说“跳转还在，但内容没变”——V-01 的职责已被限定为跳转，内容不更新是设计结果，不是遗忘。</p>
+
+      <h3>4. 订阅方式的选择依据</h3>
+      <p>三种订阅方式里，RSS 的字段最完整，含编号、生效时间、处理人编号；邮件摘要少了处理人编号，但送达稳定；站内日志更新最快，需要主动打开页面。需要核对处理人时才用 RSS，日常知道编号变了就够的话，邮件摘要更省事。这个取舍没有统一答案，取决于你要用编号做什么。</p>
+    </div>
+  </section>
+
+  <!-- 6 体验指南 -->
+  <section class="block" id="guide">
+    <div class="block-head">
+      <span class="section-kicker">GUIDE</span>
+      <h2>体验指南：新访客的四步上手</h2>
+    </div>
+    <ol class="steps">
+      <li>
+        <h3>先读公告条编号</h3>
+        <p>顶部公告条写着当前通道编号，11 月 8 日的值是 H-2026-1106。记住这串字符，后面每一步都要用。</p>
+      </li>
+      <li>
+        <h3>对照日志时间</h3>
+        <p>进入更新日志，看最近一条的时间是否在 6 小时内。超过 6 小时，先怀疑缓存，不是先怀疑站点。</p>
+      </li>
+      <li>
+        <h3>需要核对就开镜像</h3>
+        <p>M-02 用于验证网络可达，M-03 用于比对某条目是否被改过。两者都是只读，写入一律回主入口。</p>
+      </li>
+      <li>
+        <h3>订一条提醒</h3>
+        <p>每周三的邮件摘要足够覆盖大多数人的需求；需要处理人信息时再切到 RSS。</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 7 FAQ -->
+  <section class="block" id="faq">
+    <div class="block-head">
+      <span class="section-kicker">FAQ</span>
+      <h2>常见问题</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>当前的主入口是哪条通道？</summary>
+        <div class="ans"><b>H-2026-1106</b>，2026 年 11 月 6 日 08:40 生效。公告条与日志里的编号应当一致；镜像 M-02、M-03 保留只读查询，更新频率低于主入口。</div>
+      </details>
+      <details>
+        <summary>镜像站与主入口的更新间隔差多少？</summary>
+        <div class="ans">主入口每 6 小时同步一次，M-02 为 24 小时，M-03 为 72 小时。10 月 28 日至 11 月 4 日的 8 个采样点显示，M-02 平均滞后 19 条目录项，最多 41 条。</div>
+      </details>
+      <details>
+        <summary>页面打不开时先检查什么？</summary>
+        <div class="ans">先比对公告条编号与本机缓存页面编号是否一致，再换 M-02 验证网络是否可达。10 月 31 日的解析异常中，编号不一致是唯一复现条件，处置耗时 2 小时 40 分。</div>
+      </details>
+      <details>
+        <summary>订阅更新提醒有几种方式？</summary>
+        <div class="ans">邮件摘要、RSS 与站内更新日志三种。邮件摘要每周三发送，RSS 保留最近 30 条，站内日志按分钟级排序。三者字段口径一致，均含通道编号与生效时间；处理人编号只在 RSS 中出现。</div>
+      </details>
+      <details>
+        <summary>旧版入口还能用多久？</summary>
+        <div class="ans">V-01 于 2026 年 10 月 15 日进入过渡期，公告写明保留至 2026 年 12 月 31 日。期间只提供跳转，不再承载新目录项；跳转页会显示目标编号，便于二次确认。</div>
+      </details>
+      <details>
+        <summary>条目被改动过，在哪里比对？</summary>
+        <div class="ans">用 M-03 的只读字段。该通道保留最近 12 期，字段含最后修改时间与处理人编号。11 月 4 日调整后新增 2 个只读字段，写入接口保持关闭。</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- 8 用户评论 -->
+  <section class="block" id="comments">
+    <div class="block-head">
+      <span class="section-kicker">COMMENTS</span>
+      <h2>用户评论：来自使用现场的声音</h2>
+    </div>
+    <div class="comments">
+      <article class="comment">
+        <p>11 月 6 日切换那天我在外面，用手机打开发现编号还是 G-2026-1012，清了一下缓存才对上 H-1106。公告条放在最上面确实有用。</p>
+        <div class="who"><b>程野</b><span>11-06 12:20</span></div>
+      </article>
+      <article class="comment">
+        <p>M-02 的同步周期改成 24 小时之后，11 月 1 日那批新增我第二天才看到，差了 24 条。能接受，但希望公告里写清楚哪几类条目会晚。</p>
+        <div class="who"><b>林小满</b><span>11-02 09:41</span></div>
+      </article>
+      <article class="comment">
+        <p>说实话这个页面信息密度有点高，第一次来光看编号就花了十分钟。好在日志按分钟排，慢慢能摸出规律。</p>
+        <div class="who"><b>匿名访客</b><span>11-03 20:15</span></div>
+      </article>
+      <article class="comment">
+        <p>10 月 31 日那次解析异常我也碰上了，换 DNS 没用，最后是对编号发现的。排查顺序里把编号放第一条是对的。</p>
+        <div class="who"><b>老周</b><span>11-01 08:02</span></div>
+      </article>
+      <article class="comment">
+        <p>想问一下 V-01 到期之后，之前收藏的历史条目怎么办。公告只说保留至 12 月 31 日，没提历史条目会不会一起消失。</p>
+        <div class="who"><b>苏打水</b><span>11-05 22:36</span></div>
+      </article>
+      <article class="comment">
+        <p>RSS 里能查到处理人编号，这个细节挺实用。邮件摘要少了这一列，核对的时候还得回来翻。</p>
+        <div class="who"><b>徐一舟</b><span>11-04 15:10</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 9 相关资讯 -->
+  <section class="block" id="news">
+    <div class="block-head">
+      <span class="section-kicker">NEWS</span>
+      <h2>相关资讯：通道与规则动态</h2>
+    </div>
+    <ul class="tight-list">
+      <li><time>11-07</time><span class="item"><b>M-02 同步周期写入配置说明</b><span>24 小时的周期值由配置项直接给出，不再由文档转述，减少口径分歧。</span></span></li>
+      <li><time>11-05</time><span class="item"><b>编号比对写入排查清单第一条</b><span>来自 10 月 31 日异常的处置复盘，四次复现全部命中该步骤。</span></span></li>
+      <li><time>11-04</time><span class="item"><b>M-03 新增 2 个只读字段</b><span>字段为最后修改时间与处理人编号，写入接口未开放。</span></span></li>
+      <li><time>11-01</time><span class="item"><b>目录项批量新增 14 条</b><span>集中在两个分类下，M-02 到 11 月 2 日完成收敛。</span></span></li>
+      <li><time>10-30</time><span class="item"><b>邮件摘要字段讨论记录</b><span>关于是否补处理人编号，结论是先与 RSS 对齐生效时间列。</span></span></li>
+    </ul>
+  </section>
+
+  <!-- 10 相关推荐 -->
+  <section class="block" id="recommend">
+    <div class="block-head">
+      <span class="section-kicker">RECOMMEND</span>
+      <h2>相关推荐</h2>
+    </div>
+    <div class="tag-index">
+      <a href="/#latest">最新通道编号查询</a>
+      <a href="/#channels">镜像 M-02 同步周期说明</a>
+      <a href="/#deep">目录项差值对照表</a>
+      <a href="/#guide">缓存比对四步法</a>
+      <a href="/#faq">旧通道 V-01 过渡期公告</a>
+      <a href="/#news">10月31日解析异常复盘</a>
+      <a href="/#channels">M-03 只读字段清单</a>
+      <a href="/#deep">订阅方式字段差异</a>
+    </div>
+  </section>
+
+  <!-- 11 补充：时间线 -->
+  <section class="block" id="timeline">
+    <div class="block-head">
+      <span class="section-kicker">TIMELINE</span>
+      <h2>通道迁移时间线</h2>
+    </div>
+    <ul class="timeline">
+      <li>
+        <time>2026-10-15</time>
+        <b>旧通道 V-01 进入过渡期</b>
+        <p>公告写明保留至 12 月 31 日，期间仅跳转，不承载新目录项。</p>
+      </li>
+      <li>
+        <time>2026-10-31</time>
+        <b>解析异常复现并归档</b>
+        <p>编号与本机缓存不一致为唯一复现条件，处置 2 小时 40 分。</p>
+      </li>
+      <li>
+        <time>2026-11-01</time>
+        <b>目录批量新增 14 条</b>
+        <p>主入口与 M-02 的差值在当日达到 24 条，次日收敛至 8 条。</p>
+      </li>
+      <li>
+        <time>2026-11-04</time>
+        <b>M-03 只读范围调整</b>
+        <p>新增最后修改时间与处理人编号两个字段。</p>
+      </li>
+      <li>
+        <time>2026-11-06</time>
+        <b>主入口切换至 H-2026-1106</b>
+        <p>回退参数保留 72 小时，上一版本号 G-2026-1012 可查。</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 12 补充：证言 -->
+  <section class="block" id="voices">
+    <div class="block-head">
+      <span class="section-kicker">VOICES</span>
+      <h2>维护者证言</h2>
+    </div>
+    <div class="quote-card">
+      <p>我们很少删条目，删也留记录。10 月 31 日那次问题，最后有用的不是换网络，是把编号摆在排查第一步。这件事之后，日志里的每一条都带编号和生效时间，宁可多一列，也不让人猜。</p>
+      <div class="src"><b>发布页维护组</b> · 2026-11-07 记录</div>
+    </div>
+  </section>
+
+</div>
+
+<aside class="col-side" aria-label="侧栏">
+  <div class="side-panel">
+    <h2>栏目导航</h2>
+    <ul class="side-nav" id="sideNav">
+      <li><a href="/#overview">领域概览</a></li>
+      <li><a href="/#picks">精选目录</a></li>
+      <li><a href="/#latest">更新日志</a></li>
+      <li><a href="/#channels">通道分类</a></li>
+      <li><a href="/#deep">深度解析</a></li>
+      <li><a href="/#guide">体验指南</a></li>
+      <li><a href="/#faq">常见问题</a></li>
+      <li><a href="/#comments">用户评论</a></li>
+      <li><a href="/#news">相关资讯</a></li>
+      <li><a href="/#recommend">相关推荐</a></li>
+      <li><a href="/#timeline">迁移时间线</a></li>
+      <li><a href="/#voices">维护者证言</a></li>
+    </ul>
+  </div>
+  <div class="side-panel">
+    <h2>当前通道速查</h2>
+    <ul class="side-list">
+      <li><b>H-2026-1106</b> 主入口<time>11-06 生效 · 6h 同步</time></li>
+      <li><b>M-02</b> 日常镜像<time>24h 同步 · 11-07 补齐</time></li>
+      <li><b>M-03</b> 只读校验<time>72h 同步 · 保留 12 期</time></li>
+      <li><b>V-01</b> 过渡跳转<time>12-31 到期</time></li>
+    </ul>
+  </div>
+  <div class="side-panel">
+    <h2>最近日志</h2>
+    <ul class="side-list">
+      <li>目录项 187 条<time>11-08 10:12</time></li>
+      <li>M-02 补齐 19 条<time>11-07 09:20</time></li>
+      <li>主入口切换 H-1106<time>11-06 08:40</time></li>
+      <li>M-03 新增只读字段<time>11-04 16:05</time></li>
+    </ul>
+  </div>
+  <div class="side-panel side-mini">
+    <h2>订阅提醒</h2>
+    <p>邮件摘要每周三发送；RSS 保留最近 30 条；站内日志按分钟排序。三种方式字段口径一致。</p>
+  </div>
+</aside>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="brand-name">秘密基地发布页<span class="brand-sub">RELEASE HUB</span></span>
+        <p>把入口、目录与版本记录放在同一处，让每次访问都能被核对，而不是靠印象判断新旧。</p>
+      </div>
+      <div class="footer-col">
+        <h3>通道</h3>
+        <ul>
+          <li><a href="/#channels">主入口 H-2026-1106</a></li>
+          <li><a href="/#channels">镜像 M-02</a></li>
+          <li><a href="/#channels">只读校验 M-03</a></li>
+          <li><a href="/#faq">过渡期 V-01</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>内容</h3>
+        <ul>
+          <li><a href="/#picks">精选目录</a></li>
+          <li><a href="/#latest">更新日志</a></li>
+          <li><a href="/#deep">深度解析</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>帮助</h3>
+        <ul>
+          <li><a href="/#guide">访问与排查步骤</a></li>
+          <li><a href="/#faq">常见问题</a></li>
+          <li><a href="/#timeline">迁移时间线</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-note">
+      <span>页面标注更新时间 2026-11-08，对应正文更新日志中 11-08 10:12 的目录项记录。</span>
+      <span>站内通道、条目与评论为示例数据，仅用于说明发布页的核对方式。</span>
+      <span>© 2026 秘密基地发布页 · 保留所有权利</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部">回顶部</button>
+
+<script>
+(function(){
+  var menuBtn = document.getElementById('menuBtn');
+  var nav = document.getElementById('mainNav');
+  menuBtn.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function(e){
+    if(e.target.tagName === 'A' && window.innerWidth <= 820){
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  var toTop = document.getElementById('toTop');
+  function onScroll(){
+    if(window.scrollY > 520){ toTop.classList.add('show'); }
+    else { toTop.classList.remove('show'); }
+    highlight();
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  toTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  var sideLinks = Array.prototype.slice.call(document.querySelectorAll('#sideNav a'));
+  var targets = sideLinks.map(function(a){
+    var id = a.getAttribute('href').split('#')[1];
+    return document.getElementById(id);
+  });
+  function highlight(){
+    var pos = window.scrollY + 170;
+    var current = -1;
+    for(var i=0;i<targets.length;i++){
+      if(targets[i] && targets[i].offsetTop <= pos){ current = i; }
+    }
+    sideLinks.forEach(function(a, i){
+      a.classList.toggle('active', i === current);
+    });
+  }
+  highlight();
+
+  var input = document.getElementById('searchInput');
+  var result = document.getElementById('searchResult');
+  var nodes = Array.prototype.slice.call(document.querySelectorAll('.col-main h3, .col-main .tight-list .item b, .col-main .card p, .col-main .tag-index a, .col-main .faq summary'));
+  var original = nodes.map(function(n){ return n.textContent; });
+
+  function clearHits(){
+    nodes.forEach(function(n, i){
+      n.textContent = original[i];
+    });
+  }
+
+  function doSearch(){
+    var q = input.value.trim();
+    result.style.display = 'block';
+    clearHits();
+    if(!q){
+      result.textContent = '';
+      result.className = 'search-result';
+      return;
+    }
+    var hits = 0;
+    var firstHit = null;
+    nodes.forEach(function(n, i){
+      var text = original[i];
+      if(text.indexOf(q) !== -1){
+        hits++;
+        if(!firstHit){ firstHit = n; }
+        var span = document.createElement('span');
+        span.className = 'hit';
+        span.textContent = q;
+        var parts = text.split(q);
+        n.textContent = '';
+        parts.forEach(function(p, idx){
+          if(p){ n.appendChild(document.createTextNode(p)); }
+          if(idx < parts.length - 1){ n.appendChild(span.cloneNode(true)); }
+        });
+      }
+    });
+    if(hits === 0){
+      result.textContent = '没有找到与“' + q + '”相关的通道或条目，换个编号或日期再试。';
+      result.className = 'search-result search-none';
+    } else {
+      result.textContent = '找到 ' + hits + ' 处相关内容';
+      result.className = 'search-result';
+      if(firstHit){ firstHit.scrollIntoView({behavior:'smooth', block:'center'}); }
+    }
+  }
+
+  var timer = null;
+  input.addEventListener('input', function(){
+    clearTimeout(timer);
+    timer = setTimeout(doSearch, 260);
+  });
+  onScroll();
+})();
+</script>
+</body>
+</html>
