@@ -1,0 +1,1161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>集芳阁网页版-植物标本图谱与养护档案</title>
+<meta name="description" content="集芳阁网页版聚焦植物标本图谱、花期记录与阳台养护档案，收录华东与西南常见观赏植物三百余种，提供可核对的采集时间、海拔与养护条件，方便按花期和光照筛选。">
+<meta name="keywords" content="集芳阁网页版">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f4f3e'/%3E%3Cpath d='M32 14c8 6 12 14 12 22 0 8-5 14-12 14s-12-6-12-14c0-8 4-16 12-22z' fill='%23d9e5c9'/%3E%3Cpath d='M32 22v26M32 30l-7-5M32 36l8-5' stroke='%232f4f3e' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#22302a;
+  --ink-2:#42544a;
+  --ink-3:#6d7d72;
+  --paper:#f6f4ec;
+  --paper-2:#fffdf7;
+  --line:#d9d5c4;
+  --line-2:#e8e4d6;
+  --green:#2f4f3e;
+  --green-2:#456b55;
+  --moss:#7d9771;
+  --leaf:#d9e5c9;
+  --clay:#b4613f;
+  --clay-soft:#f0dfd3;
+  --gold:#a8862f;
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-lg:20px;
+  --sh:0 1px 2px rgba(34,48,42,.06),0 6px 18px rgba(34,48,42,.06);
+  --sh-hover:0 2px 6px rgba(34,48,42,.09),0 12px 26px rgba(34,48,42,.09);
+  --font:"Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
+  --font-sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --sp:clamp(14px,2.2vw,22px);
+  --sticky-h:104px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:16px;
+  line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--green-2);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.3;margin:0}
+p{margin:0 0 1em}
+[id]{scroll-margin-top:calc(var(--sticky-h) + 18px)}
+
+/* ---------- 公告条 + 页头 ---------- */
+.sticky-wrap{position:sticky;top:0;z-index:60;box-shadow:0 1px 0 var(--line)}
+.announce{
+  background:var(--green);
+  color:#eef3e6;
+  font-size:13.5px;
+  letter-spacing:.02em;
+  padding:7px 0;
+}
+.announce .wrap{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;text-align:center}
+.announce b{color:#fff;font-weight:700}
+.announce .dot{width:5px;height:5px;border-radius:50%;background:var(--leaf);opacity:.8}
+.announce a{color:#dfe9cf;text-decoration:underline;text-underline-offset:3px}
+.site-head{
+  background:rgba(255,253,247,.96);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.wrap{width:min(1180px,100% - 2*var(--sp));margin-inline:auto}
+.head-in{
+  display:flex;align-items:center;gap:18px;
+  min-height:66px;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.brand svg{width:38px;height:38px;flex:0 0 auto}
+.brand-txt{display:flex;flex-direction:column;line-height:1.15}
+.brand-name{font-family:var(--font);font-size:19px;font-weight:700;color:var(--green);letter-spacing:.03em}
+.brand-sub{font-size:11px;color:var(--ink-3);letter-spacing:.16em;font-family:var(--font-sans)}
+.main-nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:6px}
+.main-nav a{
+  font-size:14.5px;color:var(--ink-2);padding:6px 11px;border-radius:999px;
+  white-space:nowrap;
+}
+.main-nav a:hover{background:var(--leaf);color:var(--green);text-decoration:none}
+.main-nav a.active{background:var(--green);color:#f4f7ee}
+.head-tools{display:flex;align-items:center;gap:10px;margin-left:auto}
+.search{
+  display:flex;align-items:center;gap:6px;border:1px solid var(--line);
+  background:var(--paper-2);border-radius:999px;padding:5px 6px 5px 12px;
+}
+.search input{
+  border:0;background:transparent;font:inherit;font-size:13.5px;width:132px;color:var(--ink);
+  outline:none;padding:2px 0;
+}
+.search input::placeholder{color:#9aa79d}
+.search button{
+  border:0;background:var(--green);color:#f2f6ea;border-radius:999px;
+  font:inherit;font-size:13px;padding:5px 12px;cursor:pointer;line-height:1.4;
+}
+.search button:hover{background:var(--green-2)}
+.menu-btn{
+  display:none;border:1px solid var(--line);background:var(--paper-2);color:var(--ink);
+  border-radius:var(--radius-sm);font:inherit;font-size:14px;padding:6px 12px;cursor:pointer;
+  align-items:center;gap:7px;
+}
+.menu-btn .bars{display:inline-flex;flex-direction:column;gap:3px}
+.menu-btn .bars i{display:block;width:15px;height:2px;background:var(--ink-2);border-radius:2px}
+.menu-btn[aria-expanded="true"]{background:var(--leaf);border-color:var(--moss)}
+:focus-visible{outline:2.5px solid var(--clay);outline-offset:2px;border-radius:4px}
+
+.search-note{
+  display:none;font-size:13px;color:var(--clay);padding:0 0 8px;
+}
+.search-note.show{display:block}
+
+/* ---------- 首屏 ---------- */
+.hero{
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(900px 340px at 82% -12%, #e6eeda 0%, transparent 62%),
+    radial-gradient(620px 300px at 6% 108%, #efe6d5 0%, transparent 60%),
+    var(--paper-2);
+  overflow:hidden;
+}
+.hero-in{
+  display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+  gap:clamp(22px,4vw,56px);align-items:center;
+  padding:clamp(30px,5vw,60px) 0 clamp(26px,4vw,48px);
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.2em;
+  color:var(--green-2);background:var(--leaf);border-radius:999px;padding:5px 13px;
+  font-family:var(--font-sans);
+}
+.hero h1{
+  font-size:clamp(34px,5.6vw,58px);letter-spacing:.04em;color:var(--green);
+  margin:16px 0 6px;
+}
+.hero .latin{
+  font-family:var(--font);font-style:italic;color:var(--ink-3);font-size:14px;
+  letter-spacing:.08em;margin-bottom:14px;
+}
+.hero .lede{font-size:16.5px;color:var(--ink-2);max-width:38em}
+.hero .lede strong{color:var(--green);font-weight:700}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--font-sans);
+  font-size:15px;padding:11px 22px;border-radius:999px;border:1px solid transparent;
+  transition:transform .16s ease,box-shadow .16s ease,background .16s;
+}
+.btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn-primary{background:var(--green);color:#f4f7ee;box-shadow:var(--sh)}
+.btn-primary:hover{background:var(--green-2);box-shadow:var(--sh-hover)}
+.btn-ghost{border-color:var(--green-2);color:var(--green-2);background:transparent}
+.btn-ghost:hover{background:var(--leaf)}
+.hero-stats{
+  display:flex;gap:clamp(16px,3vw,34px);margin-top:26px;flex-wrap:wrap;
+  border-top:1px solid var(--line-2);padding-top:16px;
+}
+.hero-stats div{font-size:12.5px;color:var(--ink-3);letter-spacing:.04em}
+.hero-stats b{display:block;font-family:var(--font);font-size:24px;color:var(--ink);letter-spacing:.02em}
+
+/* 原创插画 */
+.hero-art{position:relative;aspect-ratio:1/1;max-width:430px;justify-self:center;width:100%}
+.hero-art svg{width:100%;height:100%;display:block}
+.hero-art .cap{
+  position:absolute;left:6%;bottom:4%;font-size:11.5px;letter-spacing:.1em;
+  color:var(--ink-3);background:rgba(255,253,247,.86);border:1px solid var(--line-2);
+  border-radius:999px;padding:4px 12px;
+}
+
+/* ---------- 主内容骨架 ---------- */
+.layout{
+  display:grid;grid-template-columns:minmax(0,1fr) 288px;
+  gap:clamp(24px,3.4vw,44px);
+  padding:clamp(28px,4vw,46px) 0 60px;
+  align-items:start;
+}
+aside.side{position:sticky;top:calc(var(--sticky-h) + 20px)}
+.side-card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 16px 14px;margin-bottom:18px;box-shadow:var(--sh);
+}
+.side-card h3{font-size:14.5px;letter-spacing:.06em;color:var(--green);margin-bottom:10px}
+.side-nav{list-style:none;margin:0;padding:0;font-size:14px}
+.side-nav li{margin:1px 0}
+.side-nav a{
+  display:block;padding:6px 10px;border-radius:var(--radius-sm);color:var(--ink-2);
+  border-left:2px solid transparent;
+}
+.side-nav a:hover{background:var(--leaf);text-decoration:none;color:var(--green)}
+.side-nav a.on{background:var(--leaf);color:var(--green);border-left-color:var(--green);font-weight:600}
+.side-meta{font-size:13px;color:var(--ink-3);line-height:1.7}
+.side-meta b{color:var(--ink);font-weight:600}
+
+/* 板块通用 */
+.section{margin-bottom:clamp(30px,4.4vw,52px)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(21px,2.6vw,27px);color:var(--green);letter-spacing:.03em}
+.sec-head .kicker{font-size:12px;letter-spacing:.2em;color:var(--moss);display:block;margin-bottom:4px;font-family:var(--font-sans)}
+.sec-head .more{font-size:13.5px;color:var(--ink-3);white-space:nowrap}
+.sec-head .more:hover{color:var(--green)}
+
+/* 概览：非对称组合 */
+.overview{
+  display:grid;grid-template-columns:1.4fr 1fr;gap:16px;
+}
+.ov-main{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:22px;box-shadow:var(--sh);
+}
+.ov-main h3{font-size:17.5px;margin-bottom:8px}
+.ov-main p{font-size:14.8px;color:var(--ink-2)}
+.ov-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.ov-tags span{
+  font-size:12.5px;color:var(--green-2);background:var(--leaf);border-radius:999px;
+  padding:4px 11px;
+}
+.ov-side{display:grid;gap:16px;grid-template-rows:auto auto}
+.ov-box{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px;box-shadow:var(--sh);
+}
+.ov-box .num{font-family:var(--font);font-size:26px;color:var(--clay);line-height:1.2}
+.ov-box .lab{font-size:12.5px;color:var(--ink-3);letter-spacing:.05em}
+.ov-box p{font-size:13.6px;color:var(--ink-2);margin:6px 0 0}
+
+/* 精选：网格卡片 */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--sh-hover)}
+.card .thumb{aspect-ratio:16/10;overflow:hidden;background:var(--line-2)}
+.card .thumb img{width:100%;height:100%;object-fit:cover}
+.card .body{padding:13px 15px 15px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card .tag{font-size:11.5px;color:var(--clay);letter-spacing:.08em}
+.card h3{font-size:16px;color:var(--ink);line-height:1.45}
+.card p{font-size:13.6px;color:var(--ink-2);margin:0}
+.card .foot{margin-top:auto;padding-top:8px;font-size:12.5px;color:var(--ink-3);display:flex;justify-content:space-between;gap:8px}
+
+/* 最新更新：紧凑列表 */
+.updates{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.up-row{
+  display:grid;grid-template-columns:74px 1fr auto;gap:14px;align-items:baseline;
+  padding:12px 16px;border-bottom:1px solid var(--line-2);font-size:14.4px;
+}
+.up-row:last-child{border-bottom:0}
+.up-row time{font-size:12.5px;color:var(--ink-3);letter-spacing:.05em}
+.up-row .up-t{color:var(--ink-2)}
+.up-row .up-t b{color:var(--ink);font-weight:600}
+.up-row .kind{font-size:11.5px;color:var(--green-2);background:var(--leaf);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.up-row:hover{background:#fbf9f0}
+
+/* 分类入口：标签索引 */
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{
+  display:inline-flex;align-items:baseline;gap:7px;font-size:14px;color:var(--ink-2);
+  background:var(--paper-2);border:1px solid var(--line);border-radius:999px;
+  padding:7px 14px;transition:background .15s,border-color .15s,transform .15s;
+}
+.chip b{font-size:11.5px;color:var(--ink-3);font-weight:400}
+.chip:hover{background:var(--leaf);border-color:var(--moss);color:var(--green);text-decoration:none;transform:translateY(-1px)}
+
+/* 深度解析：分栏正文 */
+.deep{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:clamp(20px,3vw,32px);box-shadow:var(--sh);
+}
+.deep .lead{font-size:15.5px;color:var(--ink-2);border-left:3px solid var(--moss);padding-left:14px}
+.deep h3{font-size:18px;color:var(--green);margin:24px 0 8px;letter-spacing:.02em}
+.deep h3 .no{color:var(--clay);font-family:var(--font-sans);font-size:13px;margin-right:8px;letter-spacing:.1em}
+.deep p{font-size:15px;color:var(--ink-2);text-align:justify}
+.deep-cols{columns:2;column-gap:34px}
+@media (max-width:900px){.deep-cols{columns:1}}
+.quote{
+  margin:20px 0;padding:14px 18px;background:#f4f1e4;border-left:3px solid var(--gold);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-family:var(--font);
+  font-size:15.5px;color:var(--ink-2);
+}
+.quote cite{display:block;font-size:12.5px;color:var(--ink-3);margin-top:6px;font-style:normal;font-family:var(--font-sans)}
+.verdict{
+  border:1px dashed var(--moss);border-radius:var(--radius);padding:14px 16px;margin:18px 0;
+  background:#f3f6ec;
+}
+.verdict b{color:var(--green);font-family:var(--font)}
+.verdict ul{margin:8px 0 0;padding-left:18px;font-size:14px;color:var(--ink-2)}
+.verdict li{margin:3px 0}
+
+/* 对照面板 */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:18px 0}
+.compare > div{padding:14px 16px;font-size:14px}
+.compare .th{font-family:var(--font);font-size:14.5px;letter-spacing:.04em;background:var(--leaf);color:var(--green);font-weight:700}
+.compare .l{border-right:1px solid var(--line);background:var(--paper-2)}
+.compare .r{background:#fbf7ee}
+.compare .row{display:contents}
+.compare dt,.compare dd{margin:0}
+
+/* 时间线 */
+.timeline{position:relative;padding-left:24px;margin:16px 0 0}
+.timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-item{position:relative;padding:0 0 16px 6px;font-size:14.4px;color:var(--ink-2)}
+.tl-item::before{
+  content:"";position:absolute;left:-24px;top:7px;width:9px;height:9px;border-radius:50%;
+  background:var(--paper-2);border:2px solid var(--moss);
+}
+.tl-item b{color:var(--ink)}
+.tl-item time{font-size:12.5px;color:var(--clay);letter-spacing:.05em;margin-left:6px}
+
+/* 体验指南：编号步骤 */
+.steps{counter-reset:s;display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.steps li{
+  counter-increment:s;position:relative;padding:14px 16px 14px 58px;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  font-size:14.6px;color:var(--ink-2);
+}
+.steps li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:14px;top:13px;
+  font-family:var(--font);font-size:19px;color:var(--moss);font-weight:700;
+}
+.steps li b{color:var(--ink)}
+
+/* FAQ */
+.faq details{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:10px;overflow:hidden;
+}
+.faq summary{
+  cursor:pointer;padding:13px 16px;font-size:15px;font-weight:600;color:var(--ink);
+  list-style:none;display:flex;gap:10px;align-items:baseline;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"＋";color:var(--moss);font-weight:700;flex:0 0 auto}
+.faq details[open] summary::before{content:"－"}
+.faq details[open] summary{background:#f4f6ee;color:var(--green)}
+.faq .ans{padding:2px 18px 16px 38px;font-size:14.4px;color:var(--ink-2)}
+.faq .ans p{margin:0 0 .6em}
+
+/* 评论 */
+.reviews{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.rev{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:15px 16px;display:flex;flex-direction:column;gap:8px;
+}
+.rev .who{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-3)}
+.rev .av{
+  width:28px;height:28px;border-radius:50%;background:var(--leaf);color:var(--green);
+  display:grid;place-items:center;font-family:var(--font);font-size:13px;flex:0 0 auto;
+}
+.rev p{font-size:14px;margin:0;color:var(--ink-2)}
+.rev .ref{font-size:12px;color:var(--clay);letter-spacing:.03em}
+.rev .stars{color:var(--gold);font-size:12.5px;letter-spacing:.1em}
+
+/* 资讯 */
+.news-list{list-style:none;margin:0;padding:0;display:grid;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--paper-2)}
+.news-list li{padding:13px 16px;border-bottom:1px solid var(--line-2);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline}
+.news-list li:last-child{border-bottom:0}
+.news-list time{font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+.news-list .nt{font-size:14.6px;color:var(--ink)}
+.news-list .nt span{display:block;font-size:13.2px;color:var(--ink-3);margin-top:2px}
+
+/* 榜单 */
+.rank{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.rank-row{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line-2);font-size:14.4px}
+.rank-row:last-child{border-bottom:0}
+.rank-row .rk{font-family:var(--font);font-size:17px;color:var(--moss);text-align:center}
+.rank-row:nth-child(-n+3) .rk{color:var(--clay)}
+.rank-row .rn{color:var(--ink)}
+.rank-row .rn small{display:block;color:var(--ink-3);font-size:12.5px}
+.rank-row .sc{font-size:13px;color:var(--green-2);font-variant-numeric:tabular-nums}
+
+/* 相关推荐 */
+.rec-tags{display:flex;flex-wrap:wrap;gap:8px}
+.rec-tags a{
+  font-size:13.6px;border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:6px 12px;color:var(--ink-2);background:var(--paper-2);
+}
+.rec-tags a:hover{background:var(--clay-soft);border-color:#d8b7a4;color:var(--clay);text-decoration:none}
+
+/* 页尾 */
+.site-foot{background:var(--green);color:#dfe8d4;padding:clamp(30px,4vw,46px) 0 22px;margin-top:10px}
+.foot-top{display:grid;grid-template-columns:1.2fr 2fr;gap:clamp(22px,4vw,48px)}
+.foot-brand{display:flex;gap:12px;align-items:flex-start}
+.foot-brand svg{width:42px;height:42px;flex:0 0 auto}
+.foot-brand .bn{font-family:var(--font);font-size:19px;color:#fff;letter-spacing:.04em}
+.foot-brand p{font-size:13.6px;color:#c3d3b6;margin:6px 0 0;max-width:24em}
+.foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.foot-cols h4{font-size:13.5px;color:#fff;letter-spacing:.1em;margin-bottom:8px;font-family:var(--font-sans)}
+.foot-cols ul{list-style:none;margin:0;padding:0;font-size:13.4px}
+.foot-cols li{margin:4px 0}
+.foot-cols a{color:#c9d8bd}
+.foot-cols a:hover{color:#fff}
+.foot-note{
+  border-top:1px solid rgba(255,255,255,.16);margin-top:26px;padding-top:14px;
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font-size:12.5px;color:#aebfa2;
+}
+.foot-note p{margin:0}
+
+/* 回到顶部 */
+.to-top{
+  position:fixed;right:18px;bottom:22px;z-index:70;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:var(--paper-2);color:var(--green);font-size:17px;cursor:pointer;
+  box-shadow:var(--sh);opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .2s,visibility .2s,transform .2s;
+}
+.to-top.show{opacity:1;visibility:visible;transform:none}
+.to-top:hover{background:var(--leaf)}
+
+mark{background:#f6e6a8;color:inherit;padding:0 1px;border-radius:2px}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1020px){
+  .layout{grid-template-columns:1fr}
+  aside.side{position:static;order:2}
+  .side-inner{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .side-card{margin-bottom:0}
+  .overview{grid-template-columns:1fr}
+  .hero-in{grid-template-columns:1fr;text-align:left}
+  .hero-art{max-width:340px;margin-top:6px;justify-self:start}
+  .foot-top{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  .main-nav{display:none}
+  .main-nav.open{
+    display:flex;order:5;flex-basis:100%;flex-direction:row;flex-wrap:wrap;
+    padding:6px 0 10px;border-top:1px solid var(--line-2);margin-left:0;
+  }
+  .menu-btn{display:inline-flex}
+  .head-in{flex-wrap:wrap;padding-top:8px;padding-bottom:8px;row-gap:6px}
+  .head-tools{margin-left:auto}
+  .search input{width:96px}
+  .compare{grid-template-columns:1fr}
+  .compare .l{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:600px){
+  :root{--sticky-h:118px}
+  .announce{font-size:12.5px;line-height:1.5}
+  .announce .wrap{gap:6px 10px}
+  .search{padding:4px 4px 4px 10px}
+  .search button{padding:4px 9px;font-size:12.5px}
+  .side-inner{grid-template-columns:1fr}
+  .up-row{grid-template-columns:1fr auto;gap:4px 10px}
+  .up-row time{grid-column:1/-1;font-size:12px}
+  .card-grid{grid-template-columns:1fr}
+  .reviews{grid-template-columns:1fr}
+  .foot-cols{grid-template-columns:1fr 1fr}
+  .deep{padding:18px 16px}
+  .hero-stats b{font-size:21px}
+  .to-top{right:12px;bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .card:hover,.chip:hover,.btn:hover{transform:none}
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<div class="sticky-wrap">
+  <div class="announce" role="region" aria-label="站内更新公告">
+    <div class="wrap">
+      <span><b>集芳阁网页版</b> 11 月 6 日新增「滇西北高山岩生植物」标本 42 份</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span>花期档案同步至 2026 秋季版</span>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="/#updates">查看全部更新</a>
+    </div>
+  </div>
+  <header class="site-head">
+    <div class="wrap head-in">
+      <a class="brand" href="/#top" aria-label="集芳阁网页版 首页">
+        <svg viewBox="0 0 64 64" role="img" aria-label="集芳阁图形标志：一片对生叶与叶脉">
+          <rect width="64" height="64" rx="14" fill="#2f4f3e"/>
+          <path d="M32 12c9 6.5 13.5 15 13.5 24 0 8.6-5.4 15-13.5 15s-13.5-6.4-13.5-15c0-9 4.5-17.5 13.5-24z" fill="#d9e5c9"/>
+          <path d="M32 20v29M32 29l-8-5.5M32 36l9-5.5M32 43l-6-4" stroke="#2f4f3e" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-txt">
+          <span class="brand-name">集芳阁网页版</span>
+          <span class="brand-sub">标本图谱 · 养护档案</span>
+        </span>
+      </a>
+      <nav class="main-nav" id="mainNav" aria-label="主题导航">
+        <a href="/#overview">领域概览</a>
+        <a href="/#picks">精选图谱</a>
+        <a href="/#updates">最新更新</a>
+        <a href="/#channels">分类入口</a>
+        <a href="/#deep">深度解析</a>
+        <a href="/#guide">采集指南</a>
+        <a href="/#faq">常见问题</a>
+      </nav>
+      <div class="head-tools">
+        <form class="search" role="search" id="searchForm" onsubmit="return false;">
+          <label for="q" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">站内搜索</label>
+          <input id="q" type="search" placeholder="搜标本 / 花期 / 属名" autocomplete="off">
+          <button type="button" id="searchBtn">查找</button>
+        </form>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mainNav">
+          <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>栏目
+        </button>
+      </div>
+    </div>
+    <div class="wrap"><p class="search-note" id="searchNote" role="status" aria-live="polite"></p></div>
+  </header>
+</div>
+
+<main id="top">
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <span class="eyebrow">标本 · 花期 · 生境</span>
+        <h1>集芳阁网页版</h1>
+        <p class="latin">Herbarium Collectanea · 华东与西南观赏植物档案</p>
+        <p class="lede">一份按采集地、海拔与花期整理的植物标本图谱库。收录<strong>三百一十七种</strong>常见与半野生观赏植物，每份标本标注采集人、时间与压制编号，阳台栽培条目另附光照、介质与越冬记录，可按花期、科属、耐寒区交叉筛选。</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="/#picks">翻看本周精选图谱</a>
+          <a class="btn btn-ghost" href="/#guide">对照采集与压制步骤</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>317</b>已编目标本种</div>
+          <div><b>1,486</b>花期观测记录</div>
+          <div><b>42</b>11 月新增岩生标本</div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 420 420" role="img" aria-label="线描植物标本构图：苔草、山茶花与压制纸张">
+          <defs>
+            <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fffdf7"/><stop offset="1" stop-color="#eef1e2"/>
+            </linearGradient>
+          </defs>
+          <circle cx="212" cy="206" r="176" fill="url(#pg)" stroke="#d9d5c4"/>
+          <circle cx="212" cy="206" r="150" fill="none" stroke="#e5e2d3" stroke-dasharray="3 7"/>
+          <path d="M120 320c30-52 40-104 36-160" fill="none" stroke="#456b55" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M156 200c-22-6-34-24-32-44 22 2 34 20 32 44z" fill="#d9e5c9" stroke="#456b55" stroke-width="1.8"/>
+          <path d="M150 244c20-12 40-10 54 6-16 16-38 16-54-6z" fill="#d9e5c9" stroke="#456b55" stroke-width="1.8"/>
+          <path d="M138 286c-20-2-34-16-36-34 20-2 36 12 36 34z" fill="#d9e5c9" stroke="#456b55" stroke-width="1.8"/>
+          <circle cx="250" cy="150" r="30" fill="#f0dfd3" stroke="#b4613f" stroke-width="2"/>
+          <circle cx="250" cy="150" r="14" fill="none" stroke="#b4613f" stroke-width="2" stroke-dasharray="2 4"/>
+          <path d="M250 178c2 34-6 62-30 84" fill="none" stroke="#b4613f" stroke-width="2" stroke-linecap="round"/>
+          <path d="M236 214c-16-8-30-4-40 10 14 10 30 6 40-10z" fill="#f0dfd3" stroke="#b4613f" stroke-width="1.6"/>
+          <path d="M300 96c-16 16-24 34-22 52M300 96c16 16 24 34 22 52" fill="none" stroke="#7d9771" stroke-width="1.8"/>
+          <path d="M300 96v82" fill="none" stroke="#7d9771" stroke-width="1.8"/>
+          <rect x="286" y="310" width="104" height="72" rx="6" fill="#fffdf7" stroke="#d9d5c4"/>
+          <path d="M298 328h80M298 342h64M298 356h72" stroke="#c8c4b2" stroke-width="3" stroke-linecap="round"/>
+          <path d="M96 348q116 26 232 0" fill="none" stroke="#e5e2d3" stroke-width="2"/>
+        </svg>
+        <span class="cap">标本编号 JF-2026-1106-017</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap layout">
+    <div class="main-col">
+
+      <!-- 1 领域概览 -->
+      <section class="section" id="overview">
+        <div class="sec-head">
+          <div><span class="kicker">OVERVIEW</span><h2>植物标本与阳台养护的交叉档案</h2></div>
+          <a class="more" href="/#channels">按科属浏览 →</a>
+        </div>
+        <div class="overview">
+          <div class="ov-main">
+            <h3>标本页里到底记什么</h3>
+            <p>一份合格标本条目至少包含四项：采集地与海拔、采集人及编号、压制日期、生境描述。以 10 月 24 日在浙江天目山 1,180 米处采到的黄山松为例，条目记「针叶两针一束、球果长约 5 厘米」，同时附采集当日气温 9℃、西南坡向。这些字段决定了后续能查到什么——只记地名不记海拔，花期记录就会失真。</p>
+            <p>养护条目走另一套字段：介质配比、日均光照时数、换盆周期、越冬最低温。两套字段在科属页交汇，比如山茶属既有野生种质标本，也有阳台盆栽记录。区别在于前者回答「它在哪儿长」，后者回答「它在你家怎么活」。</p>
+            <div class="ov-tags">
+              <span>采集海拔</span><span>压制编号</span><span>花期观测</span><span>介质配比</span><span>耐寒区</span><span>生境坡向</span>
+            </div>
+          </div>
+          <div class="ov-side">
+            <div class="ov-box">
+              <div class="num">78%</div>
+              <div class="lab">标本附有海拔字段</div>
+              <p>1,486 条花期记录中 1,159 条可信到日期级别，其余只到旬。</p>
+            </div>
+            <div class="ov-box">
+              <div class="num">6 个</div>
+              <div class="lab">主要采集区域</div>
+              <p>天目山、武夷山、苍山、玉龙雪山、峨眉山、井冈山，另设城市阳台对照区。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 精选内容推荐 -->
+      <section class="section" id="picks">
+        <div class="sec-head">
+          <div><span class="kicker">CURATED</span><h2>本周精选图谱</h2></div>
+          <a class="more" href="/#updates">看全部新编标本 →</a>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-camellia/480/300" width="480" height="300" loading="lazy" alt="山茶花标本压制纸上的单朵红花与两片叶" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">山茶属 · 常绿灌木</span>
+              <h3>滇山茶冬季花期观测表</h3>
+              <p>苍山 2,300 米样地连续三年记录，初花从 11 月 3 日推迟到 11 月 12 日，与 10 月低温积累有关。</p>
+              <div class="foot"><span>JF-2026-1031-004</span><span>11-02 更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-fern/480/300" width="480" height="300" loading="lazy" alt="阴湿岩壁上的蕨类叶片与孢子囊群特写" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">蕨类 · 岩生</span>
+              <h3>岩缝里的石韦怎么压平</h3>
+              <p>叶片革质、含水低，压制时不必反复换纸；孢子囊群朝上摆放，干燥后仍可辨形。</p>
+              <div class="foot"><span>JF-2026-1028-011</span><span>10-28 更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-maple/480/300" width="480" height="300" loading="lazy" alt="槭树秋叶铺在标本夹旁的木桌上" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">槭属 · 落叶乔木</span>
+              <h3>鸡爪槭叶形变异的三个断点</h3>
+              <p>同一母树不同枝条，裂片深度差到 4 毫米。把变异写进条目，比统一成「五裂」更接近实况。</p>
+              <div class="foot"><span>JF-2026-1026-007</span><span>10-26 更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-begonia/480/300" width="480" height="300" loading="lazy" alt="秋海棠叶背与花梗在浅色纸面上的压制形态" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">秋海棠属 · 草本</span>
+              <h3>阳台秋海棠越冬温度实测</h3>
+              <p>南向封闭阳台，夜间最低 6℃ 时叶片出现水渍状斑；设 8℃ 下限后恢复。介质偏干比偏湿更安全。</p>
+              <div class="foot"><span>JF-2026-1022-019</span><span>10-22 更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-primula/480/300" width="480" height="300" loading="lazy" alt="报春花高海拔样地岩石边的植株与花葶" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">报春花属 · 高山</span>
+              <h3>玉龙雪山报春花的花期窗口</h3>
+              <p>4,100 米样地雪化后 18 天进入初花，比低海拔同属提前约三周，花期仅 9 到 12 天。</p>
+              <div class="foot"><span>JF-2026-1019-002</span><span>10-19 更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jifangge-pine/480/300" width="480" height="300" loading="lazy" alt="黄山松针叶与球果的压制标本版面" style="object-fit:cover"></div>
+            <div class="body">
+              <span class="tag">松属 · 针叶</span>
+              <h3>黄山松球果尺寸与海拔对照</h3>
+              <p>天目山 1,180 米与 1,460 米两处样地，球果长度均值相差 0.6 厘米，样本各 12 个。</p>
+              <div class="foot"><span>JF-2026-1016-014</span><span>10-16 更新</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3 最新更新 -->
+      <section class="section" id="updates">
+        <div class="sec-head">
+          <div><span class="kicker">UPDATED</span><h2>最近三十天编目与修订</h2></div>
+          <span class="more">截至 2026-11-08</span>
+        </div>
+        <div class="updates">
+          <div class="up-row"><time datetime="2026-11-08">今天</time><span class="up-t"><b>滇西北高山岩生植物</b>专题新增 42 份标本，含绿绒蒿、点地梅、虎耳草</span><span class="kind">新增</span></div>
+          <div class="up-row"><time datetime="2026-11-06">11-06</time><span class="up-t"><b>黄山松</b>球果条目补齐第二处样地数据，采集人「周文澜」署名补正</span><span class="kind">修订</span></div>
+          <div class="up-row"><time datetime="2026-11-04">11-04</time><span class="up-t"><b>阳台山茶越冬</b>记录换用 2025—2026 冬季数据，覆盖上海与杭州两地</span><span class="kind">更新</span></div>
+          <div class="up-row"><time datetime="2026-11-01">11-01</time><span class="up-t"><b>武夷山蕨类</b>样地新增 9 条孢子囊群观察，附压制前后厚度对比</span><span class="kind">新增</span></div>
+          <div class="up-row"><time datetime="2026-10-29">10-29</time><span class="up-t"><b>压制纸规范</b>改动：吸水纸层数由 8 层调为 6 层，附实测干燥时长</span><span class="kind">规则</span></div>
+          <div class="up-row"><time datetime="2026-10-25">10-25</time><span class="up-t"><b>报春花属</b>花期记录校正 3 条，把「4 月中旬」细化为具体日</span><span class="kind">修订</span></div>
+          <div class="up-row"><time datetime="2026-10-17">10-17</time><span class="up-t"><b>天目山秋季样线</b>完成第三轮踏查，共收 27 份标本、96 张生境照</span><span class="kind">动态</span></div>
+        </div>
+      </section>
+
+      <!-- 4 分类入口 -->
+      <section class="section" id="channels">
+        <div class="sec-head">
+          <div><span class="kicker">CHANNELS</span><h2>按科属、生境与养护场景找条目</h2></div>
+          <a class="more" href="/#deep">看方法论 →</a>
+        </div>
+        <div class="chips">
+          <a class="chip" href="/#picks">山茶属标本 <b>58</b></a>
+          <a class="chip" href="/#picks">槭属叶形变异 <b>41</b></a>
+          <a class="chip" href="/#picks">高山报春花 <b>36</b></a>
+          <a class="chip" href="/#picks">岩生蕨类孢子 <b>29</b></a>
+          <a class="chip" href="/#guide">标本压制工具 <b>17</b></a>
+          <a class="chip" href="/#guide">阳台越冬记录 <b>63</b></a>
+          <a class="chip" href="/#updates">天目山样线 <b>96</b></a>
+          <a class="chip" href="/#updates">苍山高海拔样地 <b>74</b></a>
+          <a class="chip" href="/#picks">秋海棠属栽培 <b>52</b></a>
+          <a class="chip" href="/#faq">科属名词对照 <b>128</b></a>
+          <a class="chip" href="/#faq">花期观测方法 <b>23</b></a>
+          <a class="chip" href="/#rank">耐寒区索引 <b>9</b></a>
+        </div>
+      </section>
+
+      <!-- 5 深度解析（唯一主体阅读区） -->
+      <section class="section" id="deep">
+        <div class="sec-head">
+          <div><span class="kicker">IN-DEPTH</span><h2>深度解析：高海拔花期记录值不值得采信</h2></div>
+          <span class="more">约 1,900 字</span>
+        </div>
+        <div class="deep">
+          <p class="lead">先说结论：把高海拔花期当作「固定日历」用，会错；把它当作「随雪线波动的区间」用，能省下两次白跑的路。这个判断可以用三处样地的连续记录核对。</p>
+
+          <h3><span class="no">01</span>初花日期与雪化时间的相关性能被量化</h3>
+          <p>玉龙雪山云杉坪附近 4,100 米样地，2023 至 2026 年共记到报春花属初花 4 次：2023 年 5 月 2 日、2024 年 5 月 6 日、2025 年 4 月 28 日、2026 年 5 月 4 日。同期气象站记录的雪化日期分别为 4 月 14 日、4 月 19 日、4 月 10 日、4 月 17 日。两者差值稳定落在 17 到 19 天之间，波动不超过 2 天。</p>
+          <p>这说明条目里的「初花日」单独看没意义，「雪化后约 18 天」才是可迁移的信息。苍山 2,300 米样地情况不同：山茶初花与秋季低温积累相关，2024 年初花 11 月 3 日，2025 年 11 月 12 日，两年 10 月日均温相差 2.4℃，初花推迟 9 天。同一套「积温—初花」逻辑在低海拔适用，在高山反而不如「雪线—初花」直观。</p>
+
+          <div class="compare">
+            <div class="th">玉龙雪山 4,100 米 · 报春花</div>
+            <div class="th">苍山 2,300 米 · 滇山茶</div>
+            <div class="row"><div class="l">关键触发因子：雪化日期</div><div class="r">关键触发因子：10 月均温</div></div>
+            <div class="row"><div class="l">初花滞后：雪化后 17—19 天</div><div class="r">初花推迟：10 月均温每低 1℃，约后移 4 天</div></div>
+            <div class="row"><div class="l">花期长度：9—12 天</div><div class="r">花期长度：28—35 天</div></div>
+            <div class="row"><div class="l">记录可靠度：中，样本 4 年</div><div class="r">记录可靠度：中偏低，2024 年前缺逐日温度</div></div>
+          </div>
+
+          <h3><span class="no">02</span>三个说法互相打架，各自都有一半对</h3>
+          <p>关于高海拔花期，采集圈里常见三种说法。第一种说「海拔每升 100 米，初花推后 3 天」。天目山 1,180 米与 1,460 米两处黄山松样地，2026 年初花相差 8 天，按 280 米落差折算约每 100 米 2.9 天，与说法吻合。但玉龙雪山从 3,200 米到 4,100 米，报春花初花相差 26 天，折算每 100 米 2.9 天——数字一样，机制却不同：前者靠气温递减，后者主要靠雪化顺序。</p>
+          <p>第二种说「同一地点的花期逐年稳定，差不过三天」。这条被 2025 年的记录直接反驳：苍山样地 2024 年与 2025 年初花相差 9 天。第三种说「压制的花枝不能再用来判断花期」，周文澜在 10 月 30 日的采集笔记里写：「压制当天的花是初花还是盛花，得当场写在标签上，压完就看不出了。」这句是转述，但它解释了为什么条目要保留「采集时花态」字段。</p>
+
+          <div class="quote">
+            10 月 24 日天目山样线，1,180 米处黄山松球果尚未开裂；同日下午 1,460 米处已有 3 个球果散出种子。同一座山，一天之内差出一个物候阶段。
+            <cite>—— 10-24 天目山踏查记录，采集人 周文澜</cite>
+          </div>
+
+          <h3><span class="no">03</span>把判断拆成可核对的四条</h3>
+          <p>要验证一份高海拔花期记录能不能用，可以按下面四条逐项对，缺一条就降一档可信度。</p>
+          <div class="verdict">
+            <b>核对清单</b>
+            <ul>
+              <li>是否记录雪化日期或紧邻的气象站数据，而不只是「开花那天」。</li>
+              <li>样本株数是否写明：单株开花和群体初花能差 5 到 7 天。</li>
+              <li>是否区分初花、盛花、末花，三者时间跨度在报春花属可达 9 天。</li>
+              <li>记录人是否连续多年在同一位置观察，换人换点就要重新起算。</li>
+            </ul>
+          </div>
+          <p>按这四条回查本站条目，完全满足的有 86 条，满足三条的 214 条，只满足一两条的 57 条。后 57 条已标注「参考级」，在筛选器里默认不出现。这个分层不是给记录排名，是让查的人知道哪条能直接安排行程、哪条只能当背景。</p>
+
+          <h3><span class="no">04</span>反方观点也要摆出来</h3>
+          <p>有采集者认为，逐日物候观测成本太高，普通爱好者一年只能上山一两次，硬要雪化日期会让条目数量锐减。这个反驳成立。折中办法是允许「旬级」记录：只写「4 月中旬」，但在同一条目里注明未连续观察。目前 1,486 条花期记录中，327 条属于旬级，占 22%。这些条目不参与初花日期统计，但参与「某月能见到花」的检索。</p>
+          <p>另一处分歧在压制标本的花态标注。苍山样地 2026 年有 11 份山茶标本，标签写「盛花」但压制后花瓣皱缩明显，复核时有人认为应改「末花」。这类争议目前保留原始标签，另设复核意见栏并列，不做单方面覆盖。事实、回应、推测分栏存放，是让后来人能看见记录是怎么被改的。</p>
+        </div>
+      </section>
+
+      <!-- 6 体验指南：编号步骤 -->
+      <section class="section" id="guide">
+        <div class="sec-head">
+          <div><span class="kicker">FIELD GUIDE</span><h2>采集与压制：五步做出能查的标本</h2></div>
+          <a class="more" href="/#faq">常见疑问 →</a>
+        </div>
+        <ol class="steps">
+          <li><b>先拍生境，再动剪刀。</b>取一张横构图生境照，记下坡向、海拔、伴生植物。天目山样线要求每份标本配一张生境照，10 月 17 日那轮共拍 96 张。</li>
+          <li><b>剪取带花或带果的枝条。</b>长度控制在 25 到 30 厘米，保留叶序。蕨类取整片叶，孢子囊群朝上，干燥后仍可辨形。</li>
+          <li><b>当场写标签。</b>写清采集人、日期、地点、海拔、花态（初花／盛花／末花）。10 月 30 日周文澜的笔记提醒：压制后看不出花态。</li>
+          <li><b>换纸按吸水纸层数走。</b>10 月 29 日修订后的规范为 6 层，头两天每天换两次，之后每天一次，肉质叶延长到 5 天。</li>
+          <li><b>编号入库。</b>按「JF-年份-月日-序号」编，同一天多份顺延，编号与生境照文件名一致，避免错配。</li>
+        </ol>
+      </section>
+
+      <!-- 7 FAQ -->
+      <section class="section faq" id="faq">
+        <div class="sec-head">
+          <div><span class="kicker">FAQ</span><h2>采集与编目常见疑问</h2></div>
+          <span class="more">12 个问题</span>
+        </div>
+        <details>
+          <summary>高海拔标本为什么一定要记海拔数字？</summary>
+          <div class="ans"><p>海拔决定花期与叶形。天目山黄山松在 1,180 米与 1,460 米两处，球果长度均值差 0.6 厘米，初花差 8 天。只写「天目山」的话，下一个人无法复现这两个数。</p></div>
+        </details>
+        <details>
+          <summary>初花、盛花、末花的标准是什么？</summary>
+          <div class="ans"><p>以群体为单位：首批 3 株以上开花记初花；半数以上植株开放记盛花；剩余花朵不到三成记末花。报春花属三者跨度可达 9 天，山茶属可达 28 天以上。</p></div>
+        </details>
+        <details>
+          <summary>肉质叶压不干、发黑怎么处理？</summary>
+          <div class="ans"><p>秋海棠这类肉质叶，压制前用吸水纸夹住轻压 2 小时吸走表面水分，再正式上夹。10 月 22 日阳台记录显示，前期多吸一次水，成品发黑率从约三成降到不足一成。</p></div>
+        </details>
+        <details>
+          <summary>阳台记录的「越冬最低温」怎么测才有参考价值？</summary>
+          <div class="ans"><p>用贴盆土面的温度计，别用离地 1.5 米的空气温度。上海南向封闭阳台，2025 年 12 月夜间气温 2℃ 时，盆土表面实测 6℃，山茶叶片已现水渍斑；这个差值就是记录要写清楚的原因。</p></div>
+        </details>
+        <details>
+          <summary>标本编号能随便改吗？</summary>
+          <div class="ans"><p>编号一旦入库不改数字，只在后面加修订号。11 月 6 日黄山松条目遗漏第二处样地，原编号 JF-2026-1016-014 保留，补记为 -014R1，修订痕迹可查。</p></div>
+        </details>
+      </section>
+
+      <!-- 8 用户评论 -->
+      <section class="section" id="reviews">
+        <div class="sec-head">
+          <div><span class="kicker">READERS</span><h2>翻阅者留下的记录</h2></div>
+          <a class="more" href="/#faq">参与补正 →</a>
+        </div>
+        <div class="reviews">
+          <div class="rev">
+            <div class="who"><span class="av">林</span>林澈 · 杭州 <span class="stars">★★★★☆</span></div>
+            <p>照着「阳台秋海棠越冬温度实测」把夜间下限设到 8℃，去年发黑的两盆今年叶片完好。唯一想补的是没写用没用加湿器。</p>
+            <span class="ref">指向：JF-2026-1022-019</span>
+          </div>
+          <div class="rev">
+            <div class="who"><span class="av">邵</span>邵岩 · 昆明 <span class="stars">★★★☆☆</span></div>
+            <p>苍山山茶那条 2024 年前缺逐日温度，对比表里自己标了「可靠度中偏低」，这点诚实。但既然知道缺，为什么不一并补上 2023 年的数据。</p>
+            <span class="ref">指向：深度解析对照面板</span>
+          </div>
+          <div class="rev">
+            <div class="who"><span class="av">何</span>何蔚 · 南京 <span class="stars">★★★★★</span></div>
+            <p>「标本压制工具」分类里那篇换纸层数的改动很实用。6 层吸水纸确实比 8 层干得快，我这边黄山松针叶三天就定了。</p>
+            <span class="ref">指向：10-29 压制纸规范</span>
+          </div>
+          <div class="rev">
+            <div class="who"><span class="av">徐</span>徐一鸣 · 成都 <span class="stars">★★☆☆☆</span></div>
+            <p>玉龙雪山报春花那张卡片的缩略图和内容对不上，图里是岩石边的植株，标题说是花期窗口，点进去才看到日期表。图片描述写细一点吧。</p>
+            <span class="ref">指向：JF-2026-1019-002</span>
+          </div>
+          <div class="rev">
+            <div class="who"><span class="av">周</span>周文澜 · 临安 <span class="stars">★★★★☆</span></div>
+            <p>10 月 24 日那趟踏查同一天差出一个物候阶段，是这次爬山最有意思的发现。条目里补了照片编号，可按图核对。</p>
+            <span class="ref">指向：天目山样线记录</span>
+          </div>
+          <div class="rev">
+            <div class="who"><span class="av">石</span>石斛 · 广州 <span class="stars">★★★☆☆</span></div>
+            <p>分类入口里「岩生蕨类孢子」只有 29 条，比槭属少一半，华南的蕨类样本几乎没覆盖。希望下一轮样线往南走。</p>
+            <span class="ref">指向：分类入口频道</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9 相关资讯 -->
+      <section class="section" id="news">
+        <div class="sec-head">
+          <div><span class="kicker">NEWS</span><h2>采集季动态与规范修订</h2></div>
+        </div>
+        <ul class="news-list">
+          <li><time datetime="2026-11-05">11-05</time><span class="nt">苍山样地完成秋末最后一轮踏查<span>共收 18 份山茶标本，其中 4 份标签花态待复核，另附 31 张生境照。</span></span></li>
+          <li><time datetime="2026-10-30">10-30</time><span class="nt">压制纸规范修订稿进入讨论<span>吸水纸层数由 8 层改为 6 层，肉质叶另延长干燥时间。10-29 起在新入库条目中执行。</span></span></li>
+          <li><time datetime="2026-10-27">10-27</time><span class="nt">武夷山蕨类样地补记孢子囊群观察<span>新增 9 条，记录压制前后叶厚变化，最厚的一片从 0.4 毫米压到 0.2 毫米。</span></span></li>
+          <li><time datetime="2026-10-20">10-20</time><span class="nt">花期记录旬级条目标注上线<span>327 条只到旬的记录单独打标，不再混入初花日期统计。</span></span></li>
+          <li><time datetime="2026-10-12">10-12</time><span class="nt">天目山样线第三轮踏查出发<span>按 1,180 米与 1,460 米两个海拔带布点，每带设 6 个样方。</span></span></li>
+        </ul>
+      </section>
+
+      <!-- 10 榜单 -->
+      <section class="section" id="rank">
+        <div class="sec-head">
+          <div><span class="kicker">RANKING</span><h2>查阅次数较高的标本条目</h2></div>
+          <span class="more">近 30 天</span>
+        </div>
+        <div class="rank">
+          <div class="rank-row"><span class="rk">1</span><span class="rn">滇山茶冬季花期观测表<small>苍山 2,300 米 · 连续三年记录</small></span><span class="sc">1,842 次</span></div>
+          <div class="rank-row"><span class="rk">2</span><span class="rn">阳台秋海棠越冬温度实测<small>上海、杭州两地 · 2025—2026 冬季</small></span><span class="sc">1,507 次</span></div>
+          <div class="rank-row"><span class="rk">3</span><span class="rn">黄山松球果尺寸与海拔对照<small>天目山两处样地 · 各 12 个样本</small></span><span class="sc">1,233 次</span></div>
+          <div class="rank-row"><span class="rk">4</span><span class="rn">岩缝里的石韦怎么压平<small>武夷山样地 · 孢子囊群朝上</small></span><span class="sc">986 次</span></div>
+          <div class="rank-row"><span class="rk">5</span><span class="rn">玉龙雪山报春花的花期窗口<small>4,100 米 · 初花滞后雪化 17—19 天</small></span><span class="sc">874 次</span></div>
+          <div class="rank-row"><span class="rk">6</span><span class="rn">鸡爪槭叶形变异的三个断点<small>同一母树 · 裂片深度差 4 毫米</small></span><span class="sc">751 次</span></div>
+        </div>
+      </section>
+
+      <!-- 11 相关推荐 -->
+      <section class="section" id="recommend">
+        <div class="sec-head">
+          <div><span class="kicker">RELATED</span><h2>接着可以查这些</h2></div>
+        </div>
+        <div class="rec-tags">
+          <a href="/#picks">山茶属标本压制要点</a>
+          <a href="/#deep">高海拔花期可信度分层</a>
+          <a href="/#guide">蕨类孢子囊群观察法</a>
+          <a href="/#faq">阳台越冬最低温测法</a>
+          <a href="/#channels">耐寒区索引怎么查</a>
+          <a href="/#updates">天目山秋季样线记录</a>
+          <a href="/#news">压制纸层数修订说明</a>
+          <a href="/#rank">查阅次数较高的条目</a>
+          <a href="/#faq">标本编号修订号规则</a>
+          <a href="/#deep">初花、盛花、末花判定</a>
+        </div>
+      </section>
+
+      <!-- 12 补充板块：时间线 -->
+      <section class="section" id="timeline">
+        <div class="sec-head">
+          <div><span class="kicker">TIMELINE</span><h2>秋季采集季时间线</h2></div>
+        </div>
+        <div class="timeline">
+          <div class="tl-item"><b>10 月 12 日</b> 天目山样线第三轮踏查出发，布 12 个样方 <time datetime="2026-10-12">10-12</time></div>
+          <div class="tl-item"><b>10 月 17 日</b> 第三轮踏查收尾，27 份标本、96 张生境照入库 <time datetime="2026-10-17">10-17</time></div>
+          <div class="tl-item"><b>10 月 20 日</b> 旬级花期记录单独打标，327 条从初花统计中移出 <time datetime="2026-10-20">10-20</time></div>
+          <div class="tl-item"><b>10 月 24 日</b> 黄山松两处样地同日对比，1,460 米已有球果散种 <time datetime="2026-10-24">10-24</time></div>
+          <div class="tl-item"><b>10 月 29 日</b> 压制纸规范由 8 层改为 6 层，新条目起执行 <time datetime="2026-10-29">10-29</time></div>
+          <div class="tl-item"><b>11 月 5 日</b> 苍山秋末踏查收 18 份山茶标本，4 份花态待复核 <time datetime="2026-11-05">11-05</time></div>
+          <div class="tl-item"><b>11 月 6 日</b> 滇西北岩生植物专题增补 42 份标本 <time datetime="2026-11-06">11-06</time></div>
+        </div>
+      </section>
+
+    </div><!-- /main-col -->
+
+    <!-- 侧栏 -->
+    <aside class="side" aria-label="侧栏导航与信息">
+      <div class="side-inner">
+        <div class="side-card">
+          <h3>本页目录</h3>
+          <ul class="side-nav" id="sideNav">
+            <li><a href="/#overview">领域概览</a></li>
+            <li><a href="/#picks">精选图谱</a></li>
+            <li><a href="/#updates">最新更新</a></li>
+            <li><a href="/#channels">分类入口</a></li>
+            <li><a href="/#deep">深度解析</a></li>
+            <li><a href="/#guide">采集指南</a></li>
+            <li><a href="/#faq">常见疑问</a></li>
+            <li><a href="/#reviews">翻阅者记录</a></li>
+            <li><a href="/#news">采集季动态</a></li>
+            <li><a href="/#rank">高频条目</a></li>
+            <li><a href="/#recommend">相关推荐</a></li>
+            <li><a href="/#timeline">季内时间线</a></li>
+          </ul>
+        </div>
+        <div class="side-card">
+          <h3>编目数据</h3>
+          <div class="side-meta">
+            <p><b>标本条目</b> 317 种 / 1,082 份</p>
+            <p><b>花期记录</b> 1,486 条，旬级 327 条</p>
+            <p><b>可信度分层</b> 完整 86 条、较完整 214 条、参考级 57 条</p>
+            <p><b>最近入库</b> 11-06 滇西北岩生植物 42 份</p>
+          </div>
+        </div>
+        <div class="side-card">
+          <h3>采集提示</h3>
+          <div class="side-meta">
+            <p>11 月上旬苍山夜间已降至 3℃ 以下，样地路面结霜，采集宜上午 9 点后出发。</p>
+            <p>天目山 1,460 米带黄山松球果已开裂，取种需自备纸袋并当日登记。</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <svg viewBox="0 0 64 64" role="img" aria-label="页尾品牌图形：叶脉标记">
+          <rect width="64" height="64" rx="14" fill="#456b55"/>
+          <path d="M32 12c9 6.5 13.5 15 13.5 24 0 8.6-5.4 15-13.5 15s-13.5-6.4-13.5-15c0-9 4.5-17.5 13.5-24z" fill="#d9e5c9"/>
+          <path d="M32 20v29M32 29l-8-5.5M32 36l9-5.5" stroke="#456b55" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="bn">集芳阁网页版</div>
+          <p>把采集地、海拔与花期写进同一条目，让下一个人少走一趟白路。</p>
+        </div>
+      </div>
+      <div class="foot-cols">
+        <div>
+          <h4>图谱</h4>
+          <ul>
+            <li><a href="/#picks">山茶属标本</a></li>
+            <li><a href="/#picks">槭属叶形变异</a></li>
+            <li><a href="/#picks">高山报春花</a></li>
+            <li><a href="/#picks">岩生蕨类孢子</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>方法与规范</h4>
+          <ul>
+            <li><a href="/#guide">标本压制工具</a></li>
+            <li><a href="/#deep">花期可信度分层</a></li>
+            <li><a href="/#news">压制纸层数修订</a></li>
+            <li><a href="/#faq">花态判定标准</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>档案与动态</h4>
+          <ul>
+            <li><a href="/#updates">最近三十天编目</a></li>
+            <li><a href="/#timeline">秋季采集季时间线</a></li>
+            <li><a href="/#reviews">翻阅者记录</a></li>
+            <li><a href="/#rank">高频条目</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot-note">
+      <p>示例数据说明：条目编号、采集人署名与观测数值为演示用示例，非正式馆藏记录。</p>
+      <p>更新时间 2026-11-08 · 对应正文更新项：11-06 岩生植物 42 份、11-04 阳台山茶越冬数据。</p>
+    </div>
+    <div class="foot-note" style="border-top:0;margin-top:6px;padding-top:0;">
+      <p>© 2026 集芳阁网页版 · 标本图谱与养护档案</p>
+      <p>内容仅供采集与栽培参考</p>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="回到页面顶部" title="回到顶部">↑</button>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"集芳阁网页版",
+  "description":"植物标本图谱、花期记录与阳台养护档案，收录华东与西南常见观赏植物三百余种，含采集海拔、压制编号与生境描述。",
+  "inLanguage":"zh-CN"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {
+      "@type":"Question",
+      "name":"高海拔标本为什么一定要记海拔数字？",
+      "acceptedAnswer":{"@type":"Answer","text":"海拔决定花期与叶形。天目山黄山松在 1,180 米与 1,460 米两处，球果长度均值差 0.6 厘米，初花差 8 天。只写天目山的话，下一个人无法复现这两个数。"}
+    },
+    {
+      "@type":"Question",
+      "name":"初花、盛花、末花的标准是什么？",
+      "acceptedAnswer":{"@type":"Answer","text":"以群体为单位：首批 3 株以上开花记初花；半数以上植株开放记盛花；剩余花朵不到三成记末花。报春花属三者跨度可达 9 天，山茶属可达 28 天以上。"}
+    },
+    {
+      "@type":"Question",
+      "name":"肉质叶压不干、发黑怎么处理？",
+      "acceptedAnswer":{"@type":"Answer","text":"秋海棠这类肉质叶，压制前用吸水纸夹住轻压 2 小时吸走表面水分，再正式上夹。10 月 22 日阳台记录显示，前期多吸一次水，成品发黑率从约三成降到不足一成。"}
+    },
+    {
+      "@type":"Question",
+      "name":"阳台记录的越冬最低温怎么测才有参考价值？",
+      "acceptedAnswer":{"@type":"Answer","text":"用贴盆土面的温度计，别用离地 1.5 米的空气温度。上海南向封闭阳台，2025 年 12 月夜间气温 2℃ 时，盆土表面实测 6℃，山茶叶片已现水渍斑。"}
+    },
+    {
+      "@type":"Question",
+      "name":"标本编号能随便改吗？",
+      "acceptedAnswer":{"@type":"Answer","text":"编号一旦入库不改数字，只在后面加修订号。11 月 6 日黄山松条目遗漏第二处样地，原编号 JF-2026-1016-014 保留，补记为 -014R1，修订痕迹可查。"}
+    }
+  ]
+}
+</script>
+<script>
+(function(){
+  var menuBtn=document.getElementById('menuBtn');
+  var mainNav=document.getElementById('mainNav');
+  var sideNav=document.getElementById('sideNav');
+  var toTop=document.getElementById('toTop');
+  var input=document.getElementById('q');
+  var btn=document.getElementById('searchBtn');
+  var note=document.getElementById('searchNote');
+  var stickyEl=document.querySelector('.sticky-wrap');
+
+  /* 菜单 */
+  if(menuBtn){
+    menuBtn.addEventListener('click',function(){
+      var open=mainNav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded',open?'true':'false');
+    });
+  }
+  mainNav.addEventListener('click',function(e){
+    if(e.target.tagName==='A' && window.matchMedia('(max-width:820px)').matches){
+      mainNav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  /* 侧栏滚动高亮 */
+  function offsetTop(){
+    return (stickyEl?stickyEl.offsetHeight:104)+20;
+  }
+  var sections=[].slice.call(document.querySelectorAll('main section[id]'));
+  var sideLinks=[].slice.call(sideNav.querySelectorAll('a'));
+  var navLinks=[].slice.call(mainNav.querySelectorAll('a'));
+  function onScroll(){
+    var pos=window.scrollY+offsetTop()+30;
+    var cur='';
+    sections.forEach(function(s){ if(s.offsetTop<=pos) cur=s.id; });
+    sideLinks.forEach(function(a){
+      var on=a.getAttribute('href')==='/'+'#'+cur;
+      a.classList.toggle('on',on);
+    });
+    navLinks.forEach(function(a){
+      a.classList.toggle('active',a.getAttribute('href')==='/'+'#'+cur);
+    });
+    if(window.scrollY>420){toTop.classList.add('show');}
+    else{toTop.classList.remove('show');}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  toTop.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  /* 页内锚点平滑滚动（预留吸顶高度） */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="/#"]');
+    if(!a) return;
+    var id=a.getAttribute('href').slice(2);
+    var target=document.getElementById(id);
+    if(!target) return;
+    e.preventDefault();
+    var y=target.getBoundingClientRect().top+window.scrollY-offsetTop()-2;
+    window.scrollTo({top:y,behavior:'smooth'});
+    history.replaceState(null,'','/'+'#'+id);
+  });
+
+  /* 本地查找 */
+  function clearMarks(root){
+    [].slice.call(root.querySelectorAll('mark')).forEach(function(m){
+      var t=document.createTextNode(m.textContent);
+      m.parentNode.replaceChild(t,m);
+    });
+    if(root.normalize) root.normalize();
+  }
+  function find(){
+    var q=input.value.trim();
+    clearMarks(document.querySelector('main'));
+    if(!q){note.classList.remove('show');note.textContent='';return;}
+    var hit=0;
+    var walker=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        if(!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var p=n.parentNode;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        if(/^(SCRIPT|STYLE|MARK|svg|SVG)$/i.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes=[],n;
+    while(n=walker.nextNode()){nodes.push(n);}
+    nodes.forEach(function(node){
+      var i=node.nodeValue.indexOf(q);
+      if(i<0) return;
+      var span=document.createElement('mark');
+      var rest=node.splitText(i);
+      rest.splitText(q.length);
+      node.parentNode.insertBefore(span,rest);
+      span.appendChild(rest);
+      hit++;
+    });
+    /* 计数以节点为单位，合并到一处提示 */
+    note.classList.add('show');
+    if(hit>0){
+      note.textContent='找到 '+hit+' 处「'+q+'」，已用底色标出。';
+      var first=document.querySelector('main mark');
+      if(first){
+        var y=first.getBoundingClientRect().top+window.scrollY-offsetTop()-40;
+        window.scrollTo({top:Math.max(y,0),behavior:'smooth'});
+      }
+    }else{
+      note.textContent='没有找到「'+q+'」。可以换科属名、采集地（如天目山、苍山）或花期月份再试。';
+    }
+  }
+  btn.addEventListener('click',find);
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){e.preventDefault();find();}
+  });
+  input.addEventListener('search',function(){
+    if(!input.value){clearMarks(document.querySelector('main'));note.classList.remove('show');note.textContent='';}
+  });
+})();
+</script>
+</body>
+              </html>
